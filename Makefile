@@ -6,14 +6,14 @@
 #    By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/16 04:26:01 by hel-asli          #+#    #+#              #
-#    Updated: 2024/06/16 13:31:05 by hel-asli         ###   ########.fr        #
+#    Updated: 2024/06/16 14:42:53 by hel-asli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+# CFLAGS = -Wall -Werror -Wextra
 #LDFLAGS = -fsanitize=address -g -L
 
 
