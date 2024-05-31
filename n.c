@@ -1,20 +1,35 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   n.c                                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/03/16 03:57:34 by hel-asli         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
+void err_exit(char *str)
+{
+	perror(str);
+	exit(EXIT_FAILURE);
+}
 
 int main(void)
 {
-	int id = fork();
-	
+	pid_t pid;
+	pid = fork();
+	if (pid == -1)
+		err_exit(NULL);
+	if (pid == 0)
+	{
+		printf("I am the child process.\n");
+		sleep(2);
+		exit(EXIT_SUCCESS);
+	}
+	/*
+	if (unlink("ooo") == 0)
+		printf("File scuccesully deleted");
+	else
+		printf("Error deleting file");
+	*/
+	else
+	{
+		printf("I am the parent process.\n");
+		wait(NULL);
+		printf("Child process terminate after a 2s delay.\n");
+	}
+
+	return (0);
 }

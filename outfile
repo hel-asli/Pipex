@@ -1,0 +1,4 @@
+	pid_t pid1 = fork();
+		err_exit("fork");
+		pid_t pid2 = fork();
+			err_exit("fork");
