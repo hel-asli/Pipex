@@ -1,7 +1,7 @@
 NAME = pipex
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
-SRCS = main.c utils/ft_putstr_fd.c utils/ft_split.c
+# CFLAGS = -Wall -Werror -Wextra
+SRCS = main.c pipex_parsing.c utils/ft_putstr_fd.c utils/ft_split.c utils/ft_strjoin.c error_helper.c
 HEADER = pipex.h
 OBJS = $(SRCS:.c=.o)
 

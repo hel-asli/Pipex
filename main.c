@@ -12,81 +12,87 @@
 
 #include "pipex.h"
 
-void err_exit(char *str)
-{
-	perror(str);
-	exit(EXIT_FAILURE); // the exit make all the available resource available to the kernel for reallocation
-	// the parent ps can recive the EXIT_STATUS using the wait fun
-}
 
 void ft_lsof(void)
 {
 	system("lsof -c pipex");
 }
 
+
+
+void first_cmd(t_pipex *pipex , char **env)
+{
+	if (dup2(pipex->infile_fd, 0) == -1)
+		err_exit("dup infile to stdin");
+	if (close(pipex->infile_fd) == -1 || errno == EBADF)
+	if (close(pipex->fds[0]) == -1 || errno == EBADF)
+		err_exit("close the read end of the pipe");
+	if (dup2(pipex->fds[1], 1) == -1)
+		err_exit("dup write-end of the pip to stdout");
+	if (close(pipex->fds[1]) == -1 || errno == EBADF)
+		close(pipex->fds[1]);
+	if (check_executable(pipex->env_path, &pipex->path_cmd1, pipex->first_cmd[0]))
+		execve(pipex->path_cmd1, pipex->first_cmd, env);
+	err_exit("execve");
+}
+
+void second_cmd(t_pipex *pipex, char **env)
+{
+	if (close(pipex->fds[1]) == -1 || errno == EBADF)
+		err_exit("close the write end of the pipe");
+	if (dup2(pipex->fds[0], 0) == -1)
+		err_exit("dup the read end of the pipe to stdin");
+	if (close(pipex->fds[0]) == -1 || errno == EBADF)
+		err_exit("close the read end of the pipe");
+	if (dup2(pipex->outile_fd, 1) == -1)
+		err_exit("dup the outfile to the stdout");
+	if (close(pipex->outile_fd) == -1 || errno == EBADF)
+		err_exit("close the outfile");
+	if (check_executable(pipex->env_path, &pipex->path_cmd2, pipex->second_cmd[0]))
+		execve(pipex->path_cmd2, pipex->second_cmd, env);
+	err_exit("execve"); // this line is extecuted only in the case when execve Fail :)
+}
+
+void parent(t_pipex *pipex, char **env)
+{
+	pid_t pid = fork();
+	if (pid == -1)
+		err_exit("fork");
+	if (pid == 0)
+		second_cmd(pipex, env);
+	else
+	{
+		if (close(pipex->fds[1]) == -1 || errno == EBADF)
+			err_exit("close the write end of the pipe");
+		if (close(pipex->fds[0]) == -1 || errno == EBADF)
+			err_exit("close the read end of the pipe");
+		while (wait(NULL) != -1 || errno != ECHILD);
+	}
+}
+
+
+
 int	main(int ac, char *av[], char *env[])
 {
-	(void)ac;
-	(void)av;
-	(void)env;
+	t_pipex pipex;
 
-	atexit(ft_lsof);
-	if (ac != 5)	
-	{
-		fprintf(stderr, "Bad Args: < infile cmd1 cmd1 > outfile ");
-		exit(EXIT_FAILURE);
-	}
-
-	int fds[2];
-	if (pipe(fds) == -1)
+	check_args(ac, av, &pipex);
+	check_env(env, &pipex);
+	if (pipe(pipex.fds) == -1)
 		err_exit("pipe");
-
 	pid_t pid1 = fork();
 
 	if (pid1 == -1)
 		err_exit("fork");
 	else if (pid1 == 0)
 	{
-		int infile_fd = open(av[1], O_RDONLY);
-		if (infile_fd == -1)
-			err_exit("open");
-		close(fds[0]);
-		if (dup2(infile_fd, 0) == -1)
-			err_exit("dup2");
-		close(infile_fd);
-		dup2(fds[1], 1);
-		close(fds[1]);
-
-		execve("/bin/cat", ft_split(av[2], ' '), env);
-		err_exit("execve");
+		first_cmd(&pipex, env);
+	
 	}
 	else
 	{
-		pid_t pid2 = fork();
-		if (pid2 == -1)
-			err_exit("fork");
-		else if (pid2 == 0)
-		{
-			close(fds[1]);
-			if (dup2(fds[0], 0) == -1)
-				err_exit("dup2");
-			close(fds[0]);
-
-			int fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd_out == -1)
-				err_exit("open");
-			if (dup2(fd_out, 1) == -1)
-				err_exit("dup2");
-			close(fd_out);
-			execve("/bin/ls", ft_split(av[3], ' '), env);
-			err_exit("execve"); // this line is extecuted only in the case when execve Fail :)
-		}
-		else
-		{
-			close(fds[0]);	
-			close(fds[1]);
-			while (wait(NULL) != -1 || errno != ECHILD);
-		}
+		parent(&pipex, env);
 	}
-	return (1);
+	return (0);
 }
+
