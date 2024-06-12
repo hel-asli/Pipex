@@ -1,42 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 21:15:53 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/01 16:51:58 by hel-asli         ###   ########.fr       */
+/*   Created: 2024/05/25 14:35:31 by hel-asli          #+#    #+#             */
+/*   Updated: 2024/06/12 00:15:42 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-char	*ft_strjoin(const char *s1, const char *s2, char c)
+size_t	ft_strlen(char *str)
 {
-	char	*str1;
-	char	*str2;
-	char	*p;
-	int		i;
-	int		j;
+	size_t	n;
 
-	str1 = (char *)s1;
-	str2 = (char *)s2;
-	if (!str1 || !str2)
-		return (NULL);
-	p = malloc(ft_strlen(str1) + ft_strlen(str2) + 2);
-	if (!p)
-		return (NULL);
-	i = 0;
-	while (str1[i])
-	{
-		p[i] = str1[i];
-		i++;
-	}
-	p[i++] = c;
-	j = 0;
-	while (str2[j])
-		p[i++] = str2[j++];
-	p[i] = '\0';
-	return (p);
+	n = 0;
+	while (*str++)
+		n++;
+	return (n);
+}
+
+void	ft_putstr_fd(char *str, int fd)
+{
+	if (fd < 0)
+		return ;
+	while (*str)
+		write(fd, str++, 1);
 }

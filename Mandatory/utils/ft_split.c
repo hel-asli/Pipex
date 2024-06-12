@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 14:37:36 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/05/25 20:25:59 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/11 23:28:56 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 int	count_words(char const *s, char c)
 {
 	int		count;
-	size_t	i;
 
 	if (!s)
 		return (0);
 	count = 0;
-	i = 0;
 	while (*s)
 	{
 		if (*s != c)

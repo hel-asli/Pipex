@@ -6,23 +6,24 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/01 17:11:59 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/11 23:55:44 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX
-# define PIPEX
+#ifndef PIPEX_H
+# define PIPEX_H
 
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <errno.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include <errno.h>
+# include <stdbool.h>
+# include <signal.h>
 
-#define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile :)"
+# define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile ;)\n"
 
-/**/
 typedef struct s_pipex
 {
 	int		infile_fd;
@@ -30,10 +31,10 @@ typedef struct s_pipex
 	char	*path_cmd1;
 	char	*path_cmd2;
 	char	**env_path; // split the Path With :
-	char	**first_cmd;
-	char	**second_cmd;
-	int		fds[2];
-} t_pipex;
+	char	**first_cmd; // first command
+	char	**second_cmd; // second command
+	int		fds[2]; // pipe fds
+}	t_pipex;
 
 size_t	ft_strlen(char *str);
 char	**ft_split(char const *s, char c);
@@ -43,6 +44,9 @@ void	check_args(int ac, char *av[], t_pipex *pipex);
 void	check_env(char **env, t_pipex *pipex);
 int		check_executable(char **env_path, char **path, char *cmd_name);
 void	err_exit(char *str);
-void error_handle(char *str);
+void	error_handle(char *str);
+char	**ft_free(char **split);
+void	ft_parent(t_pipex *pipex);
+int		find_path(char **env);
 
-# endif
+#endif
