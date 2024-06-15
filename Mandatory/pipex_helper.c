@@ -18,16 +18,9 @@ void	err_exit(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	check_env(char	**env, t_pipex	*pipex)
-{
-	int	i;
-
-	i = find_path(env);
-	if (!i)
-		error_handle("env not exits");
-	else
-		pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
-}
+// void	check_env(char	**env, t_pipex	*pipex)
+// {
+// }
 
 void	ft_parent(t_pipex *pipex)
 {
@@ -36,7 +29,7 @@ void	ft_parent(t_pipex *pipex)
 	ft_free(pipex->env_path);
 	if (close(pipex->infile_fd) == -1 || errno == EBADF)
 		err_exit("close");
-	if (close(pipex->outile_fd) == -1 || errno == EBADF)
+	if (close(pipex->outfile_fd) == -1 || errno == EBADF)
 		err_exit("close");
 	if (close(pipex->fds[1]) == -1 || errno == EBADF)
 		err_exit("close the write end of the pipe");

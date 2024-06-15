@@ -27,7 +27,7 @@
 typedef struct s_pipex
 {
 	int		infile_fd;
-	int		outile_fd;
+	int		outfile_fd;
 	char	*path_cmd1;
 	char	*path_cmd2;
 	char	**env_path; // split the Path With :
@@ -41,12 +41,14 @@ char	**ft_split(char const *s, char c);
 void	ft_putstr_fd(char *str, int fd);
 char	*ft_strjoin(const char *s1, const char *s2, char c);
 void	check_args(int ac, char *av[], t_pipex *pipex);
-void	check_env(char **env, t_pipex *pipex);
+// void	check_env(char **env, t_pipex *pipex);
 int		check_executable(char **env_path, char **path, char *cmd_name);
 void	err_exit(char *str);
 void	error_handle(char *str);
 char	**ft_free(char **split);
 void	ft_parent(t_pipex *pipex);
 int		find_path(char **env);
+void	free_resource(t_pipex *pipex);
+void	error_handle(char *str);
 
 #endif

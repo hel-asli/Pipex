@@ -1,7 +1,7 @@
 NAME = pipex
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
-LDFLAGS = -fsanitize=address -g
+#LDFLAGS = -fsanitize=address -g
 SRCS = Mandatory/main.c Mandatory/pipex_parsing.c\
 	   Mandatory/utils/ft_putstr_fd.c Mandatory/utils/ft_split.c\
 	   Mandatory/utils/ft_strjoin.c Mandatory/pipex_helper.c

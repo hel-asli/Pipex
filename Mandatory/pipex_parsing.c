@@ -12,26 +12,28 @@
 
 #include "pipex.h"
 
-void	check_args(int ac, char *av[], t_pipex *pipex)
+void check_args(int ac, char *env[], t_pipex *pipex)
 {
-	(void)av;
-	if (ac != 5)
-	{
-		ft_putstr_fd(ERR_MSG, 2);
-		exit(EXIT_FAILURE);
-	}
-	pipex->infile_fd = open(av[1], O_RDONLY);
-	if (pipex->infile_fd == -1)
-		err_exit("open infile");
-	pipex->outile_fd = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (pipex->outile_fd == -1)
-		err_exit("open outfile");
-	pipex->first_cmd = ft_split(av[2], ' ');
-	if (!pipex->first_cmd)
-		error_handle("malloc :)\n");
-	pipex->second_cmd = ft_split(av[3], ' ');
-	if (!pipex->second_cmd)
-		error_handle("malloc :)\n");
+    int i;
+
+    if (ac != 5)
+    {
+        fprintf(stderr, "Usage: %s infile cmd1 cmd2 outfile\n", env[0]);
+        exit(EXIT_FAILURE);
+    }
+    i = find_path(env);
+    if (!i)
+    {
+        fprintf(stderr, "env PATH not found\n");
+        exit(EXIT_FAILURE);
+    }
+    pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
+    if (!pipex->env_path || pipex->env_path[0] == 0)
+    {
+        ft_free(pipex->env_path);
+        fprintf(stderr, "Failed to parse PATH\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 int	stats_with(char *str)
@@ -55,8 +57,11 @@ int	find_path(char **env)
 	i = 0;
 	while (env[i])
 	{
+		// puts(env[i]);
 		if (stats_with(env[i]))
+		{
 			return (i);
+		}
 		i++;
 	}
 	return (0);
@@ -92,7 +97,7 @@ int	check_executable(char **env_path, char **path, char *cmd_name)
 		{
 			*path = ft_strjoin(env_path[i], cmd_name, '/');
 			if (!*path)
-				error_handle("malloc :)\n");
+				exit(EXIT_FAILURE);
 			if (check_path(*path))
 				return (0);
 			if (access(*path, F_OK | X_OK) == 0)
