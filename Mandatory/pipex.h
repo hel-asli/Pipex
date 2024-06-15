@@ -40,7 +40,7 @@ size_t	ft_strlen(char *str);
 char	**ft_split(char const *s, char c);
 void	ft_putstr_fd(char *str, int fd);
 char	*ft_strjoin(const char *s1, const char *s2, char c);
-void	check_args(int ac, char *av[], t_pipex *pipex);
+void	check_args(int ac, char *env[], t_pipex *pipex);
 // void	check_env(char **env, t_pipex *pipex);
 int		check_executable(char **env_path, char **path, char *cmd_name);
 void	err_exit(char *str);
