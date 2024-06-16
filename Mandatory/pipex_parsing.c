@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:21:08 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/11 23:28:13 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/16 04:43:45 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void check_args(int ac, char *env[], t_pipex *pipex)
 
     if (ac != 5)
     {
-        fprintf(stderr, "Usage: %s infile cmd1 cmd2 outfile\n", env[0]);
+        fprintf(stderr, "Usage:infile cmd1 cmd2 outfile\n");
         exit(EXIT_FAILURE);
     }
     i = find_path(env);
