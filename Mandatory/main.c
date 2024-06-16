@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/15 21:31:36 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/16 14:21:16 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,19 @@ void	ft_lsof(void)
 	system("leaks pipex");
 }
 
-void intialize_pipex(t_pipex *pipex, char **av, int flag)
+// write a function to free resource . 
+
+
+// void free_resource(t_pipex *pipex)
+// {
+//     if (close(pipex->infile_fd) == -1)
+//         err_exit("close");
+//     if (close(pipex->infile_fd) == -1)
+//         err_exit("close");
+//     if (close(pipex->fds[0]) == -1 || close(pipex->fds[1]) == -1)
+//         err_exit("close");
+// }
+void child_helper(t_pipex *pipex, char **av, int flag)
 {
     if (flag == 0)
     {
@@ -65,14 +77,14 @@ void intialize_pipex(t_pipex *pipex, char **av, int flag)
     }
 }
 
-void first_cmd(t_pipex *pipex, char *av[], char **env)
+void first_child(t_pipex *pipex, char *av[], char **env)
 {
-    intialize_pipex(pipex, av, 0); // open infile && split cmd
-    if (dup2(pipex->infile_fd, 0) == -1)
+    child_helper(pipex, av, 0); // open infile && split cmd
+    if (dup2(pipex->infile_fd, STDIN_FILENO) == -1)
         err_exit("dup infile to stdin");
     if (close(pipex->infile_fd) == -1)
         err_exit("close infile of pipe");
-    if (dup2(pipex->fds[1], 1) == -1)
+    if (dup2(pipex->fds[1], STDOUT_FILENO) == -1)
         err_exit("dup write-end of the pipe to stdout");
     if (close(pipex->fds[0]) == -1)
         err_exit("close the read end of the pipe");
@@ -85,19 +97,17 @@ void first_cmd(t_pipex *pipex, char *av[], char **env)
     }
     ft_free(pipex->env_path);
     ft_free(pipex->first_cmd);
-    //err_exit("execve");
-    perror("execve");
-    exit(127);
+    err_exit("execve");
 }
 
-void second_cmd(t_pipex *pipex, char **av, char **env)
+void second_child(t_pipex *pipex, char **av, char **env)
 {
-    intialize_pipex(pipex, av, 1);
-    if (dup2(pipex->outfile_fd, 1) == -1)
+    child_helper(pipex, av, 1);
+    if (dup2(pipex->outfile_fd, STDOUT_FILENO) == -1)
         err_exit("dup the outfile to the stdout");
     if (close(pipex->outfile_fd) == -1)
         err_exit("close the outfile");
-    if (dup2(pipex->fds[0], 0) == -1)
+    if (dup2(pipex->fds[0], STDIN_FILENO) == -1)
         err_exit("dup the read end of the pipe to stdin");
     if (close(pipex->fds[1]) == -1)
         err_exit("close the write end of the pipe");
@@ -107,9 +117,7 @@ void second_cmd(t_pipex *pipex, char **av, char **env)
         execve(pipex->path_cmd2, pipex->second_cmd, env);
     ft_free(pipex->env_path);
     ft_free(pipex->second_cmd);
-    // err_exit("execve");
-    perror("execve");
-    exit(127);
+    err_exit("execve");
 }
 
 void parent(t_pipex *pipex, pid_t pid1, char **av, char **env)
@@ -122,7 +130,7 @@ void parent(t_pipex *pipex, pid_t pid1, char **av, char **env)
         err_exit("fork");
     if (pid == 0)
     {
-        second_cmd(pipex, av, env);
+        second_child(pipex, av, env);
     }
     else
     {
@@ -158,7 +166,7 @@ int main(int ac, char *av[], char *env[])
     }
     else if (pid1 == 0)
     {
-        first_cmd(&pipex, av, env);
+        first_child(&pipex, av, env);
     }
     else
     {

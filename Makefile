@@ -6,12 +6,11 @@
 #    By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/16 04:26:01 by hel-asli          #+#    #+#              #
-#    Updated: 2024/06/16 13:15:29 by hel-asli         ###   ########.fr        #
+#    Updated: 2024/06/16 13:31:05 by hel-asli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = Mandatory/pipex
-BONUS_NAME = Bonus/pipex
+NAME = pipex
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
@@ -22,12 +21,12 @@ MANDATORY_DIR = Mandatory
 BONUS_DIR = Bonus
 
 # Source files
-SRCS = Mandatory/main.c Mandatory/pipex_parsing.c \
-       Mandatory/utils/ft_putstr_fd.c Mandatory/utils/ft_split.c \
-       Mandatory/utils/ft_strjoin.c Mandatory/pipex_helper.c
+SRCS = $(MANDATORY_DIR)/main.c $(MANDATORY_DIR)/pipex_parsing.c \
+       $(MANDATORY_DIR)/utils/ft_putstr_fd.c $(MANDATORY_DIR)/utils/ft_split.c \
+       $(MANDATORY_DIR)/utils/ft_strjoin.c $(MANDATORY_DIR)/pipex_helper.c
 
-BONUS_SRCS = Bonus/main.c Bonus/utils_bonus/ft_putstr_fd.c Bonus/utils_bonus/ft_split.c \
-             Bonus/utils_bonus/ft_strjoin.c Bonus/utils_bonus/ft_strcmp.c
+BONUS_SRCS = $(BONUS_DIR)/main.c $(BONUS_DIR)/utils_bonus/ft_putstr_fd.c $(BONUS_DIR)/utils_bonus/ft_split.c \
+             $(BONUS_DIR)/utils_bonus/ft_strjoin.c $(BONUS_DIR)/utils_bonus/ft_strcmp.c
 
 
 OBJS = $(SRCS:.c=.o)
@@ -40,18 +39,16 @@ BONUS_HEADER = $(BONUS_DIR)/pipex_bonus.h
 
 all: $(NAME)
 
-bonus: $(BONUS_NAME)
-
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-$(BONUS_NAME): $(BONUS_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+bonus : $(BONUS_OBJS)
+	$(CC) $(CFLAGS) $(BONUS_OBJS) -o $(NAME) $(LDFLAGS)
 
 $(MANDATORY_DIR)/%.o: $(MANDATORY_DIR)/%.c $(HEADER)
 	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@
 
-Bonus/%.o: Bonus/%.c $(BONUS_HEADER)
+$(BONUS_DIR)/%.o: $(BONUS_DIR)/%.c $(BONUS_HEADER)
 	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@
 
 clean:

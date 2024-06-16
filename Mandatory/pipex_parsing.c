@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:21:08 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/16 04:43:45 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/16 14:19:39 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@ void check_args(int ac, char *env[], t_pipex *pipex)
 
     if (ac != 5)
     {
-        fprintf(stderr, "Usage:infile cmd1 cmd2 outfile\n");
+        ft_putstr_fd(ERR_MSG, STDERR_FILENO);
         exit(EXIT_FAILURE);
     }
     i = find_path(env);
     if (!i)
     {
-        fprintf(stderr, "env PATH not found\n");
+        ft_putstr_fd("env PATH not found\n", STDERR_FILENO);
         exit(EXIT_FAILURE);
     }
     pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
     if (!pipex->env_path || pipex->env_path[0] == 0)
     {
         ft_free(pipex->env_path);
-        fprintf(stderr, "Failed to parse PATH\n");
+        ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);
         exit(EXIT_FAILURE);
     }
 }
