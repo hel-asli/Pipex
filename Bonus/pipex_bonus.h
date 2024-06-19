@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/16 13:29:42 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/18 20:36:24 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ typedef struct s_pipex
 	int		infile_fd;
 	int		outfile_fd;
 	char	*cmd_path;
+	char	**env;
+	char	**av;
+	int		ac;
+	char	**cmd;
 	char	**env_path;
 }	t_pipex;
 
@@ -37,6 +41,11 @@ char	**ft_split(char const *s, char c);
 void	ft_putstr_fd(char *str, int fd);
 char	*ft_strjoin(const char *s1, const char *s2, char c);
 int		ft_strcmp(char *s1, char *s2);
+void	check_args(char *env[], t_pipex *pipex);
+int		stats_with(char *str);
+int		find_path(char **env);
+char	**ft_free(char **split);
+int		check_executable(char **env_path, char **path, char *cmd_name);
 // void	error_handler(char *str);
 
 #endif

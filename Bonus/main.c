@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/01/22 09:46:59 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/19 18:13:00 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void err_handler(char *msg)
 {
     ft_putstr_fd(msg, 2);
-    exit(EXIT_FAILURE);  
+    exit(EXIT_FAILURE);
 }
 
 void err_exit(char *str)
@@ -24,69 +24,111 @@ void err_exit(char *str)
     exit(EXIT_FAILURE);
 }
 
-void multiple_pipes(t_pipex *pipex, int ac)
-{
-    int nb = ac - 3;
-    pid_t fds[nb][2];
-    int i= 0;
-    int j = 0;
-    while (i < nb)
-    {
-        if (pipe(fds[i]));
-            err_exit("pipe");
-        i++;
+void close_pipes(pid_t fds[][2], int size) {
+    for (int i = 0; i < size; i++) {
+        close(fds[i][0]);
+        close(fds[i][1]);
     }
-        /*
-
-            ---> parent
-            fork() --> 1 child ->execute the first command ;
-            
-            ---> parent  waitpid ();
-        */
-        // ./pipex *** infile cmd1 ***| cmd2 | cmd3 | cmd4 outfile
-        // first child  
-        // other command
-        // pipes_helper();
-        while (j <= nb - 1)
-        {
-            // fork;
-            // j == 0;
-            // execute the first command;
-            // j == nb  - 1 
-            // execute last command
-            // j > 0 && j < nb - 1
-            // execute other cmd
-            pid_t id = fork(); 
-            int status; 
-            if (id < 0)
-                err_exit("fork"); // free and close
-            if (id == 0)
-            {
-                ft_putstr_fd("execute cmd***", 1);
-                exit(EXIT_SUCCESS);
-            }
-            else
-                waitpid(id, &status, 0);
-        }
 }
 
-int main(int ac, char **av, char **env)
-{
-    t_pipex pipex; 
-    (void)av;
-    (void)env;
-    if (ac < 5)
-        err_handler("hhhhhoh");
-    
-    if (ft_strcmp(av[1], "here_doc") == 0)
-    {
-        // helper function here_doc
-        ft_putstr_fd("here_doc", 1);
+void first_cmd(t_pipex *pipex, pid_t fds[][2], int j) {
+    pipex->infile_fd = open(pipex->av[1], O_RDONLY);
+    if (pipex->infile_fd < 0)
+        err_exit("open infile");
+    pipex->cmd = ft_split(pipex->av[2], ' ');
+    if (!pipex->cmd)
+        err_exit("ft_split");
+    dup2(pipex->infile_fd, STDIN_FILENO);
+    close(pipex->infile_fd);
+    dup2(fds[j][1], STDOUT_FILENO);
+    close_pipes(fds, pipex->ac - 4);
+    if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0])) {
+        execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
-    else
-    {
+    err_exit("execve first_cmd");
+}
+
+void last_cmd(t_pipex *pipex, pid_t fds[][2], int j) {
+    pipex->cmd = ft_split(pipex->av[j + 2], ' ');
+    if (!pipex->cmd)
+        err_exit("ft_split");
+    pipex->outfile_fd = open(pipex->av[pipex->ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
+    if (pipex->outfile_fd < 0)
+        err_exit("open outfile");
+    dup2(pipex->outfile_fd, STDOUT_FILENO);
+    close(pipex->outfile_fd);
+    dup2(fds[j - 1][0], STDIN_FILENO);
+    close_pipes(fds, pipex->ac - 4);
+    if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0])) {
+        execve(pipex->cmd_path, pipex->cmd, pipex->env);
+    }
+    err_exit("execve last_cmd");
+}
+
+void other_cmd(t_pipex *pipex, pid_t fds[][2], int j) {
+    pipex->cmd = ft_split(pipex->av[j + 2], ' ');
+    if (!pipex->cmd)
+        err_exit("ft_split");
+    dup2(fds[j - 1][0], 0);
+    dup2(fds[j][1], 1);
+    close_pipes(fds, pipex->ac - 4);
+    if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0])) {
+        execve(pipex->cmd_path, pipex->cmd, pipex->env);
+    }
+    err_exit("execve other_cmd");
+}
+
+void multiple_pipes(t_pipex *pipex, int ac) {
+    int nb = ac - 4;
+    pid_t fds[nb][2];
+    int status;
+
+    for (int i = 0; i < nb; i++) {
+        if (pipe(fds[i]) == -1)
+            err_exit("pipe");
+    }
+    pid_t ids[nb];
+
+    for (int j = 0; j <= nb; j++) {
+
+        ids[j] = fork();
+        if (ids[j] < 0)
+            err_exit("fork");
+        if (ids[j] == 0) {
+            if (j == 0) {
+                first_cmd(pipex, fds, j);
+            } else if (j == nb) {
+                last_cmd(pipex, fds, j);
+            } else {
+                other_cmd(pipex, fds, j);
+            }
+        }
+    }
+
+    // Parent process closes all pipes
+    close_pipes(fds, nb);
+
+    int a = 0;
+    // Parent waits for all child processes to finish
+    while(waitpid(ids[a], NULL, 0) != -1 || errno != ECHILD);
+}
+
+int main(int ac, char **av, char **env) {
+    t_pipex pipex;
+    pipex.av = av;
+    pipex.env = env;
+    pipex.ac = ac;
+
+    if (ac < 5)
+        err_handler("Insufficient arguments\n");
+
+    if (ft_strcmp(av[1], "here_doc") == 0) {
+        // Implement the here_doc functionality if needed
+        ft_putstr_fd("here_doc\n", 1);
+    } else {
+        check_args(env, &pipex);
         multiple_pipes(&pipex, ac);
     }
-        
-    // printf("hellow rodl");
+
+    return 0;
 }
