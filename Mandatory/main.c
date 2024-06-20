@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/16 14:21:16 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/20 19:59:35 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void second_child(t_pipex *pipex, char **av, char **env)
 void parent(t_pipex *pipex, pid_t pid1, char **av, char **env)
 {
     pid_t pid;
-    int status[2];
+    int status[2] = {0};
 
     pid = fork();
     if (pid == -1)

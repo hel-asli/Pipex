@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/20 10:06:57 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/20 20:03:51 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void other_cmd(t_pipex *pipex, pid_t fds[][2], int j)
 {
     pipex->cmd = ft_split(pipex->av[j + 2], ' ');
     if (!pipex->cmd)
-        err_exit("ft_split");
+        err_handler("split\n");
     dup2(fds[j - 1][0], STDIN_FILENO);
     dup2(fds[j][1], STDOUT_FILENO);
     close_pipes(fds, pipex->ac - 4);
@@ -117,7 +117,7 @@ void multiple_pipes(t_pipex *pipex, int ac)
     int i = 0;
     int j = 0;
     pid_t fds[nb][2];
-    int status = -1;
+    int status = 0;
 
     while(i < nb)
     {
@@ -161,10 +161,7 @@ void multiple_pipes(t_pipex *pipex, int ac)
 
     int a = 0;
     // Parent waits for all child processes to finish
-    while(waitpid(ids[a], &status, 0) != -1)
-    {
-        a++;
-    }
+    while(waitpid(ids[a++], &status, 0) != -1 || errno == ECHILD)
     exit(WEXITSTATUS(status));
 }
 
