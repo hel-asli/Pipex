@@ -23,7 +23,7 @@ void check_args(char *env[], t_pipex *pipex)
         exit(EXIT_FAILURE);
     }
     pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
-    if (!pipex->env_path || pipex->env_path[0] == 0)
+    if (!pipex->env_path || !pipex->env_path[0])
     {
         ft_free(pipex->env_path);
         ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);
@@ -93,12 +93,8 @@ int	check_executable(char **env_path, char **path, char *cmd_name)
 			*path = ft_strjoin(env_path[i], cmd_name, '/');
 			if (!*path)
 				exit(EXIT_FAILURE);
-				/*
 			if (check_path(*path))
-			{
 				return (0);
-			}
-				*/
 			if (access(*path, F_OK | X_OK) == 0)
 				return (1);
 			free(*path);

@@ -114,7 +114,10 @@ void second_child(t_pipex *pipex, char **av, char **env)
     if (close(pipex->fds[0]) == -1)
         err_exit("close the read end of the pipe");
     if (check_executable(pipex->env_path, &pipex->path_cmd2, pipex->second_cmd[0]))
+    {
+        ft_free(pipex->env_path);
         execve(pipex->path_cmd2, pipex->second_cmd, env);
+    }
     ft_free(pipex->env_path);
     ft_free(pipex->second_cmd);
     err_exit("execve");

@@ -10,8 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
+#NAME = $(MANDATORY_DIR)/pipex
+#BONUS_NAME = $(BONUS_DIR)/pipex
 NAME = pipex
-
 CC = cc
 # CFLAGS = -Wall -Werror -Wextra
 #LDFLAGS = -fsanitize=address -g -L
@@ -40,13 +41,15 @@ BONUS_HEADER = $(BONUS_DIR)/pipex_bonus.h
 
 all: $(NAME)
 
+#bonus : $(BONUS_NAME)
+
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 bonus : $(BONUS_OBJS)
-	$(CC) $(CFLAGS) $(BONUS_OBJS) -o $(NAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o pipex
 
-$(MANDATORY_DIR)/%.o: $(MANDATORY_DIR)/%.c $(HEADER)
+$(MANDATORY_DIR)/%.o: (MANDATORY_DIR)/%.c $(HEADER)
 	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@
 
 $(BONUS_DIR)/%.o: $(BONUS_DIR)/%.c $(BONUS_HEADER)

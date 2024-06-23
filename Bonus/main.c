@@ -6,11 +6,21 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/20 20:03:51 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/20 20:18:24 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void free_res(t_pipex *pipex)
+{
+    if (pipex->cmd_path)
+        free(pipex->cmd_path);
+    if (pipex->cmd)
+        ft_free(pipex->cmd);
+    if (pipex->env_path)
+        ft_free(pipex->env_path);
+}
 
 void err_handler(char *msg)
 {
@@ -40,16 +50,16 @@ void first_cmd(t_pipex *pipex, pid_t fds[][2], int j)
     pipex->infile_fd = open(pipex->av[1], O_RDONLY);
     if (pipex->infile_fd < 0)
     {
-        ft_free(pipex->env_path);
+        free_res(pipex);
         close_pipes(fds, j);  
         err_exit("open infile");
     }
     pipex->cmd = ft_split(pipex->av[2], ' ');
     if (!pipex->cmd)
     {
-        close_pipes(fds, j);  
-        ft_free(pipex->cmd);
-        ft_free(pipex->env_path);
+        close_pipes(fds, pipex->ac - 4);  
+        close(pipex->infile_fd);
+        free_res(pipex);
         err_exit("ft_split");
     }
     dup2(pipex->infile_fd, STDIN_FILENO);
@@ -58,38 +68,40 @@ void first_cmd(t_pipex *pipex, pid_t fds[][2], int j)
     close_pipes(fds, pipex->ac - 4);
     if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
     {
-        ft_free(pipex->env_path);   
         execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
-    ft_free(pipex->env_path);
-    close_pipes(fds, j);
     ft_free(pipex->cmd);
+    free_res(pipex);
     err_exit("execve first_cmd");
 }
 
 void last_cmd(t_pipex *pipex, pid_t fds[][2], int j)
 {
     pipex->outfile_fd = open(pipex->av[pipex->ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
-    if (pipex->outfile_fd < 0)
+    if (pipex->outfile_fd == -1)
     {
-        ft_free(pipex->env_path);
-        close_pipes(fds, j);
+        free_res(pipex);
+        close_pipes(fds, pipex->ac - 4);
         err_exit("open outfile");
     }
     pipex->cmd = ft_split(pipex->av[j + 2], ' ');
     if (!pipex->cmd)
+    {
+        close_pipes(fds, pipex->ac - 4);
+        close(pipex->outfile_fd);
+        free_res(pipex);
         err_exit("ft_split");
+    }
     dup2(pipex->outfile_fd, STDOUT_FILENO);
     close(pipex->outfile_fd);
     dup2(fds[j - 1][0], STDIN_FILENO);
     close_pipes(fds, pipex->ac - 4);
     if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
     {
-        execve(pipex->cmd_path, pipex->cmd, pipex->env);
+         execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
-    ft_free(pipex->env_path);
-    // close_pipes(fds, j);
     ft_free(pipex->cmd);
+    free_res(pipex);
     err_exit("execve last_cmd");
 }
 
@@ -97,17 +109,20 @@ void other_cmd(t_pipex *pipex, pid_t fds[][2], int j)
 {
     pipex->cmd = ft_split(pipex->av[j + 2], ' ');
     if (!pipex->cmd)
+    {
+        free_res(pipex);
+        close_pipes(fds, pipex->ac - 4);
         err_handler("split\n");
+    }
     dup2(fds[j - 1][0], STDIN_FILENO);
     dup2(fds[j][1], STDOUT_FILENO);
     close_pipes(fds, pipex->ac - 4);
     if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
     {
-        ft_free(pipex->env_path);   
         execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
-    ft_free(pipex->env_path);
     ft_free(pipex->cmd);
+    free_res(pipex);
     err_exit("execve other_cmd");
 }
 
@@ -129,7 +144,7 @@ void multiple_pipes(t_pipex *pipex, int ac)
         }
         i++;
     }
-    pid_t ids[nb];
+    pid_t ids[nb + 1];
 
     while (j <= nb)
     {
@@ -156,12 +171,18 @@ void multiple_pipes(t_pipex *pipex, int ac)
         j++;
     }
 
-    ft_free(pipex->env_path);
-    close_pipes(fds, nb);
 
     int a = 0;
     // Parent waits for all child processes to finish
-    while(waitpid(ids[a++], &status, 0) != -1 || errno == ECHILD)
+    while(a <= nb)
+    {
+        if (waitpid(ids[a], &status, 0) == -1 || errno == ECHILD)
+            err_exit("waitpid");
+        a++;
+    }
+
+    ft_free(pipex->env_path);
+    close_pipes(fds, nb);
     exit(WEXITSTATUS(status));
 }
 
@@ -184,3 +205,5 @@ int main(int ac, char **av, char **env) {
 
     return 0;
 }
+
+// 0x401ABE:
