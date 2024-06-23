@@ -14,12 +14,23 @@
 
 void free_res(t_pipex *pipex)
 {
+    if (!pipex)
+        return ;
     if (pipex->cmd_path)
+    {
         free(pipex->cmd_path);
+        pipex->cmd_path = NULL;
+    }
     if (pipex->cmd)
+    {
         ft_free(pipex->cmd);
+        pipex->cmd_path = NULL;
+    }
     if (pipex->env_path)
+    {
         ft_free(pipex->env_path);
+        pipex->cmd_path = NULL;
+    }
 }
 
 void err_handler(char *msg)
@@ -39,8 +50,10 @@ void close_pipes(pid_t fds[][2], int size)
     int i = 0;
     while (i < size)
     {
-        close(fds[i][0]);
-        close(fds[i][1]);
+        if (close(fds[i][0]) == -1)
+            err_exit("close");
+        if (close(fds[i][1]) == -1)
+            err_exit("close");
         i++;
     }
 }
@@ -55,22 +68,25 @@ void first_cmd(t_pipex *pipex, pid_t fds[][2], int j)
         err_exit("open infile");
     }
     pipex->cmd = ft_split(pipex->av[2], ' ');
-    if (!pipex->cmd)
+    if (!pipex->cmd || !pipex->cmd[0])
     {
         close_pipes(fds, pipex->ac - 4);  
         close(pipex->infile_fd);
         free_res(pipex);
-        err_exit("ft_split");
+        err_handler("ft_split");
     }
-    dup2(pipex->infile_fd, STDIN_FILENO);
-    close(pipex->infile_fd);
-    dup2(fds[j][1], STDOUT_FILENO);
+    if (dup2(pipex->infile_fd, STDIN_FILENO) == -1)
+        err_exit("dup");
+    if (close(pipex->infile_fd) == -1)
+        err_exit("close");
+    if (dup2(fds[j][1], STDOUT_FILENO) == -1)
+        err_exit("dup");
     close_pipes(fds, pipex->ac - 4);
     if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
     {
+        ft_free(pipex->env_path);
         execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
-    ft_free(pipex->cmd);
     free_res(pipex);
     err_exit("execve first_cmd");
 }
@@ -85,22 +101,24 @@ void last_cmd(t_pipex *pipex, pid_t fds[][2], int j)
         err_exit("open outfile");
     }
     pipex->cmd = ft_split(pipex->av[j + 2], ' ');
-    if (!pipex->cmd)
+    if (!pipex->cmd || !pipex->cmd[0])
     {
         close_pipes(fds, pipex->ac - 4);
         close(pipex->outfile_fd);
         free_res(pipex);
-        err_exit("ft_split");
+        err_handler("ft_split");
     }
-    dup2(pipex->outfile_fd, STDOUT_FILENO);
-    close(pipex->outfile_fd);
-    dup2(fds[j - 1][0], STDIN_FILENO);
+    if (dup2(pipex->outfile_fd, STDOUT_FILENO) == -1)
+        err_exit("dup");
+    if (close(pipex->outfile_fd) == -1)
+        err_exit("close");
+    if (dup2(fds[j - 1][0], STDIN_FILENO) == -1)
+        err_exit("dup2");
     close_pipes(fds, pipex->ac - 4);
     if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
     {
          execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
-    ft_free(pipex->cmd);
     free_res(pipex);
     err_exit("execve last_cmd");
 }
@@ -121,13 +139,14 @@ void other_cmd(t_pipex *pipex, pid_t fds[][2], int j)
     {
         execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
-    ft_free(pipex->cmd);
     free_res(pipex);
     err_exit("execve other_cmd");
 }
 
 void multiple_pipes(t_pipex *pipex, int ac)
 {
+    pipex->cmd = NULL;
+    pipex->cmd_path = NULL;
     int nb = ac - 4;
     int i = 0;
     int j = 0;
@@ -171,9 +190,12 @@ void multiple_pipes(t_pipex *pipex, int ac)
         j++;
     }
 
+    free_res(pipex);
+    close_pipes(fds, nb);
 
     int a = 0;
     // Parent waits for all child processes to finish
+
     while(a <= nb)
     {
         if (waitpid(ids[a], &status, 0) == -1 || errno == ECHILD)
@@ -181,8 +203,6 @@ void multiple_pipes(t_pipex *pipex, int ac)
         a++;
     }
 
-    ft_free(pipex->env_path);
-    close_pipes(fds, nb);
     exit(WEXITSTATUS(status));
 }
 

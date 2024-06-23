@@ -37,6 +37,7 @@ typedef struct s_pipex
 }	t_pipex;
 
 size_t	ft_strlen(char *str);
+void	free_res(t_pipex *pipex);
 char	**ft_split(char const *s, char c);
 void	ft_putstr_fd(char *str, int fd);
 char	*ft_strjoin(const char *s1, const char *s2, char c);

@@ -98,9 +98,9 @@ int	check_executable(char **env_path, char **path, char *cmd_name)
 			if (access(*path, F_OK | X_OK) == 0)
 				return (1);
 			free(*path);
+			*path = NULL;
 		}
 		i++;
 	}
-
 	return (0);
 }
