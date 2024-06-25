@@ -6,13 +6,13 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 21:15:53 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/16 04:31:10 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/25 16:41:46 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex_bonus.h"
 
-char	*ft_strjoin(const char *s1, const char *s2, char c)
+char	*ft_strjoin_del(const char *s1, const char *s2, char c)
 {
 	char	*str1;
 	char	*str2;

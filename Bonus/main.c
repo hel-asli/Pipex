@@ -6,11 +6,16 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/20 20:18:24 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/25 18:19:23 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+void ft_lsof(void)
+{
+    system("lsof -c pipex");
+}
 
 void free_res(t_pipex *pipex)
 {
@@ -60,6 +65,7 @@ void close_pipes(pid_t fds[][2], int size)
 
 void first_cmd(t_pipex *pipex, pid_t fds[][2], int j)
 {
+    
     pipex->infile_fd = open(pipex->av[1], O_RDONLY);
     if (pipex->infile_fd < 0)
     {
@@ -206,7 +212,9 @@ void multiple_pipes(t_pipex *pipex, int ac)
     exit(WEXITSTATUS(status));
 }
 
-int main(int ac, char **av, char **env) {
+
+int main(int ac, char **av, char **env)
+{
     t_pipex pipex;
     pipex.av = av;
     pipex.env = env;
@@ -215,8 +223,15 @@ int main(int ac, char **av, char **env) {
     if (ac < 5)
         err_handler("Insufficient arguments\n");
 
-    if (ft_strcmp(av[1], "here_doc") == 0)
-        ft_putstr_fd("here_doc\n", 1);
+    if (ft_strcmp(av[1], "here_doc") == 0 && ac == 6)
+    {
+        //here_doc();
+        // understanding heredoc ;
+        check_args(env, &pipex);
+        heredoc_implement(&pipex);
+        // puts("hhh");
+        // multiple_pipes(&pipex, ac);
+    }
     else
     {
         check_args(env, &pipex);
