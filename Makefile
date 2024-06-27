@@ -6,12 +6,12 @@
 #    By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/16 04:26:01 by hel-asli          #+#    #+#              #
-#    Updated: 2024/06/25 18:29:56 by hel-asli         ###   ########.fr        #
+#    Updated: 2024/06/27 17:52:14 by hel-asli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-#NAME = $(MANDATORY_DIR)/pipex
-#BONUS_NAME = $(BONUS_DIR)/pipex
+# NAME = $(MANDATORY_DIR)/pipex
+# BONUS_NAME = $(BONUS_DIR)/pipex
 NAME = pipex
 CC = cc
 # CFLAGS = -Wall -Werror -Wextra
@@ -40,17 +40,17 @@ HEADER = $(MANDATORY_DIR)/pipex.h
 BONUS_HEADER = $(BONUS_DIR)/pipex_bonus.h
 
 
-all: $(NAME)
+all: $(MANDATORY_DIR)/$(NAME)
 
-#bonus : $(BONUS_NAME)
+bonus : $(BONUS_DIR)/$(NAME)
 
-$(NAME): $(OBJS)
+$(MANDATORY_DIR)/$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-bonus : $(BONUS_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o pipex
+$(BONUS_DIR)/$(NAME) : $(BONUS_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-$(MANDATORY_DIR)/%.o: (MANDATORY_DIR)/%.c $(HEADER)
+$(MANDATORY_DIR)/%.o: $(MANDATORY_DIR)/%.c $(HEADER)
 	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@
 
 $(BONUS_DIR)/%.o: $(BONUS_DIR)/%.c $(BONUS_HEADER)
@@ -64,4 +64,4 @@ fclean: clean
 
 re: fclean all bonus
 
-.PHONY: all bonus clean fclean re
+.PHONY: clean
