@@ -6,16 +6,14 @@
 #    By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/16 04:26:01 by hel-asli          #+#    #+#              #
-#    Updated: 2024/06/27 17:52:14 by hel-asli         ###   ########.fr        #
+#    Updated: 2024/06/29 18:25:33 by hel-asli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# NAME = $(MANDATORY_DIR)/pipex
-# BONUS_NAME = $(BONUS_DIR)/pipex
 NAME = pipex
 CC = cc
-# CFLAGS = -Wall -Werror -Wextra
-#LDFLAGS = -fsanitize=address -g -L
+CFLAGS = -Wall -Werror -Wextra
+# LDFLAGS = -fsanitize=address -g
 
 
 MANDATORY_DIR = Mandatory
@@ -60,7 +58,7 @@ clean:
 	rm -f $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
-	rm -f $(NAME) $(BONUS_NAME)
+	rm -f $(MANDATORY_DIR)/$(NAME) $(BONUS_DIR)/$(NAME)
 
 re: fclean all bonus
 

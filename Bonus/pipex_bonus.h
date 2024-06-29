@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/25 17:39:27 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/29 17:46:38 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <signal.h>
 
 # define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile ;)\n"
+# define FILE_NAME "/tmp/.here_doc"
 
 # ifndef BUFFER_SIZE
 # define BUFFER_SIZE 42
@@ -39,6 +40,8 @@ typedef struct s_pipex
 	char	**cmd;
 	char	**env_path;
 }	t_pipex;
+
+
 
 
 
@@ -59,6 +62,7 @@ int		ft_strchr(char *str);
 char	*ft_strdup(char *str);
 void	heredoc_implement(t_pipex *pipex);
 void	err_exit(char *str);
+void err_handler(char *msg);
 // void	error_handler(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/25 18:19:23 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/29 17:34:44 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void ft_lsof(void)
 {
-    system("lsof -c pipex");
+    system("leaks -c pipex");
 }
 
 void free_res(t_pipex *pipex)
