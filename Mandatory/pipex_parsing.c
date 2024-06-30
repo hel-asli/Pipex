@@ -6,34 +6,34 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:21:08 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/27 17:41:56 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/30 05:59:53 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void check_args(int ac, char *env[], t_pipex *pipex)
+void	check_args(int ac, char *env[], t_pipex *pipex)
 {
-    int i;
+	int	i;
 
-    if (ac != 5)
-    {
-        ft_putstr_fd(ERR_MSG, STDERR_FILENO);
-        exit(EXIT_FAILURE);
-    }
-    i = find_path(env);
-    if (!i)
-    {
-        ft_putstr_fd("env PATH not found\n", STDERR_FILENO);
-        exit(EXIT_FAILURE);
-    }
-    pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
-    if (!pipex->env_path || pipex->env_path[0] == 0)
-    {
-        ft_free(pipex->env_path);
-        ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);
-        exit(EXIT_FAILURE);
-    }
+	if (ac != 5)
+	{
+		ft_putstr_fd(ERR_MSG, STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	i = find_path(env);
+	if (!i)
+	{
+		ft_putstr_fd("env PATH not found\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
+	if (!pipex->env_path || pipex->env_path[0] == 0)
+	{
+		ft_free(pipex->env_path);
+		ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	stats_with(char *str)
@@ -57,7 +57,6 @@ int	find_path(char **env)
 	i = 0;
 	while (env[i])
 	{
-		// puts(env[i]);
 		if (stats_with(env[i]))
 		{
 			return (i);

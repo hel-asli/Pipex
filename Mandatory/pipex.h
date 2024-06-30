@@ -49,5 +49,7 @@ void	ft_parent(t_pipex *pipex);
 int		find_path(char **env);
 void	free_resource(t_pipex *pipex);
 void	error_handle(char *str);
+void	first_child_helper(t_pipex *pipex, char **av);
+void	second_child_helper(t_pipex *pipex, char **av);
 
 #endif

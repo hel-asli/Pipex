@@ -6,7 +6,7 @@
 #    By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/16 04:26:01 by hel-asli          #+#    #+#              #
-#    Updated: 2024/06/29 18:25:33 by hel-asli         ###   ########.fr        #
+#    Updated: 2024/06/30 03:37:38 by hel-asli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRCS = $(MANDATORY_DIR)/main.c $(MANDATORY_DIR)/pipex_parsing.c \
 BONUS_SRCS = $(BONUS_DIR)/main.c $(BONUS_DIR)/utils_bonus/ft_putstr_fd.c $(BONUS_DIR)/utils_bonus/ft_split.c \
              $(BONUS_DIR)/utils_bonus/ft_strjoin.c $(BONUS_DIR)/utils_bonus/ft_strcmp.c \
 			 $(BONUS_DIR)/parsing.c $(BONUS_DIR)/get_next_line.c $(BONUS_DIR)/get_next_line_utils.c \
-			 $(BONUS_DIR)/heredoc.c
+			 $(BONUS_DIR)/heredoc.c $(BONUS_DIR)/utils_bonus/ft_itoa.c
 
 
 OBJS = $(SRCS:.c=.o)

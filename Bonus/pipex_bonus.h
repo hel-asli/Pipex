@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/29 17:46:38 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/30 03:38:43 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_pipex
 	int		ac;
 	char	**cmd;
 	char	**env_path;
+	char	*here_doc;
 }	t_pipex;
 
 
@@ -62,7 +63,8 @@ int		ft_strchr(char *str);
 char	*ft_strdup(char *str);
 void	heredoc_implement(t_pipex *pipex);
 void	err_exit(char *str);
-void err_handler(char *msg);
+void	err_handler(char *msg);
+char	*ft_itoa(int n);
 // void	error_handler(char *str);
 
 #endif

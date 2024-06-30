@@ -26,7 +26,7 @@ int line_cmp(const char *s1, const char *s2)
 
 void execute_cmd1(t_pipex *pipex, int fds[2])
 {
-    pipex->infile_fd = open(FILE_NAME, O_RDONLY);
+    pipex->infile_fd = open(pipex->here_doc, O_RDONLY);
     if (pipex->infile_fd < 0)
     {
         ft_free(pipex->env_path);
@@ -46,9 +46,11 @@ void execute_cmd1(t_pipex *pipex, int fds[2])
     if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
     {
         ft_free(pipex->env_path);
+        free(pipex->here_doc);
         execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
     ft_free(pipex->cmd);
+    free(pipex->here_doc);
     ft_free(pipex->env_path);
     err_exit("execve");
 }
@@ -75,10 +77,12 @@ void execute_cmd2(t_pipex *pipex, int fds[2])
     if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
     {
         ft_free(pipex->env_path);
+        free(pipex->here_doc);
         execve(pipex->cmd_path, pipex->cmd, pipex->env);
     }
     ft_free(pipex->env_path);
     ft_free(pipex->cmd);
+    free(pipex->here_doc);
     err_exit("execve");
 
 }
@@ -95,6 +99,7 @@ void parent(t_pipex *pipex, pid_t id, int fds[2])
     else
     {
         ft_free(pipex->env_path);
+        free(pipex->here_doc);
         close(fds[0]);
         close(fds[1]);
         status[0] = 0;
@@ -104,12 +109,13 @@ void parent(t_pipex *pipex, pid_t id, int fds[2])
         if (waitpid(id1, &status[1], 0) < 0)
             err_exit("waitpid");
     }
+    unlink(pipex->here_doc);
     exit(WEXITSTATUS(status[1]));
 }
 
 void heredoc_file (t_pipex *pipex)
 {
-    int fd = open(FILE_NAME, O_CREAT | O_RDWR | O_TRUNC, 0766);
+    int fd = open(pipex->here_doc, O_CREAT | O_RDWR | O_TRUNC, 0766);
     if (fd == -1)
         err_exit("open heredoc");
    
@@ -119,17 +125,35 @@ void heredoc_file (t_pipex *pipex)
     {
         write(1, "heredoc> ", ft_strlen("heredoc> "));
         str = get_next_line(STDIN_FILENO);
-        write(fd, str, ft_strlen(str));
         if (!str)
-            return ;
+            break ;
+        if (!line_cmp(str, pipex->av[2]))
+        {
+            free(str);
+            break ;
+        }
+        write(fd, str, ft_strlen(str));
         free(str);
     }
     free(ptr);
     close(fd);
 }
 
+char *get_file_name(void)
+{
+    char *ptr = ft_itoa(getpid());
+    if (!ptr)
+        return (NULL);
+    char *str = ft_strjoin(ft_strdup("/tmp/.here_doc-XXX"), ptr);
+    if (!str)
+        return (NULL);
+    free(ptr);
+    return (str);
+}
+
 void heredoc_implement(t_pipex *pipex)
 {
+    pipex->here_doc = get_file_name();
     heredoc_file(pipex);
     
     int fds[2];

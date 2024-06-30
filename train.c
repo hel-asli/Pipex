@@ -6,14 +6,11 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 21:53:16 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/15 21:53:19 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/30 02:20:32 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "Mandatory/pipex.h"
-
-
 
 void err_exit(char *str)
 {
