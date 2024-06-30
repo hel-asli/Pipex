@@ -6,49 +6,11 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 06:18:06 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/30 18:38:15 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-void	ft_lsof(void)
-{
-	system("leaks -c pipex");
-}
-
-void    free_res(t_pipex *pipex)
-{
-	if (!pipex)
-		return ;
-	if (pipex->cmd_path)
-	{
-		free(pipex->cmd_path);
-		pipex->cmd_path = NULL;
-	}
-	if (pipex->cmd)
-	{
-		ft_free(pipex->cmd);
-		pipex->cmd_path = NULL;
-	}
-	if (pipex->env_path)
-	{
-		ft_free(pipex->env_path);
-		pipex->cmd_path = NULL;
-	}
-}
-
-void err_handler(char *msg)
-{
-	ft_putstr_fd(msg, 2);
-	exit(EXIT_FAILURE);
-}
-
-void err_exit(char *str)
-{
-	perror(str);
-	exit(EXIT_FAILURE);
-}
 
 void close_pipes(pid_t fds[][2], int size)
 {
@@ -63,120 +25,10 @@ void close_pipes(pid_t fds[][2], int size)
 	}
 }
 
-void    first_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j)
-{
-	pipex->infile_fd = open(pipex->av[1], O_RDONLY);
-	if (pipex->infile_fd < 0)
-	{
-		free_res(pipex);
-		close_pipes(fds, j);
-		err_exit("open infile");
-	}
-	pipex->cmd = ft_split(pipex->av[2], ' ');
-	if (!pipex->cmd || !pipex->cmd[0])
-	{
-		close_pipes(fds, pipex->ac - 4);
-		close(pipex->infile_fd);
-		free_res(pipex);
-		err_handler("ft_split");
-	}
-}
 
-void    last_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j)
+void multiple_pipe_helper(t_pipex *pipex, pid_t ids[], pid_t fds[][2], int nb)
 {
-	pipex->outfile_fd = open(pipex->av[pipex->ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (pipex->outfile_fd == -1)
-	{
-		free_res(pipex);
-		close_pipes(fds, pipex->ac - 4);
-		err_exit("open outfile");
-	}
-	pipex->cmd = ft_split(pipex->av[j + 2], ' ');
-	if (!pipex->cmd || !pipex->cmd[0])
-	{
-		close_pipes(fds, pipex->ac - 4);
-		close(pipex->outfile_fd);
-		free_res(pipex);
-		err_handler("ft_split");
-	}
-}
-
-void first_cmd(t_pipex *pipex, pid_t fds[][2], int j)
-{
-	first_cmd_helper(pipex, fds, j);
-	if (dup2(pipex->infile_fd, STDIN_FILENO) == -1)
-		err_exit("dup");
-	if (close(pipex->infile_fd) == -1)
-		err_exit("close");
-	if (dup2(fds[j][1], STDOUT_FILENO) == -1)
-		err_exit("dup");
-	close_pipes(fds, pipex->ac - 4);
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
-	{
-		ft_free(pipex->env_path);
-		execve(pipex->cmd_path, pipex->cmd, pipex->env);
-	}
-	free_res(pipex);
-	err_exit("execve first_cmd");
-}
-
-void last_cmd(t_pipex *pipex, pid_t fds[][2], int j)
-{
-	last_cmd_helper(pipex, fds, j);
-	if (dup2(pipex->outfile_fd, STDOUT_FILENO) == -1)
-		err_exit("dup");
-	if (close(pipex->outfile_fd) == -1)
-		err_exit("close");
-	if (dup2(fds[j - 1][0], STDIN_FILENO) == -1)
-		err_exit("dup2");
-	close_pipes(fds, pipex->ac - 4);
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
-	{
-		execve(pipex->cmd_path, pipex->cmd, pipex->env);
-	}
-	free_res(pipex);
-	err_exit("execve last_cmd");
-}
-
-void other_cmd(t_pipex *pipex, pid_t fds[][2], int j)
-{
-	pipex->cmd = ft_split(pipex->av[j + 2], ' ');
-	if (!pipex->cmd)
-	{
-		free_res(pipex);
-		close_pipes(fds, pipex->ac - 4);
-		err_handler("split\n");
-	}
-	dup2(fds[j - 1][0], STDIN_FILENO);
-	dup2(fds[j][1], STDOUT_FILENO);
-	close_pipes(fds, pipex->ac - 4);
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
-	{
-		execve(pipex->cmd_path, pipex->cmd, pipex->env);
-	}
-	free_res(pipex);
-	err_exit("execve other_cmd");
-}
-
-void multiple_pipes(t_pipex *pipex, int ac)
-{
-	int nb = ac - 4;
-	int i = 0;
 	int j = 0;
-	pid_t fds[nb][2];
-	int status = 0;
-
-	while(i < nb)
-	{
-		if (pipe(fds[i]) == -1)
-		{
-			ft_free(pipex->env_path);
-			close_pipes(fds, i);  
-			err_exit("pipe");
-		}
-		i++;
-	}
-	pid_t ids[nb + 1];
 
 	while (j <= nb)
 	{
@@ -198,17 +50,44 @@ void multiple_pipes(t_pipex *pipex, int ac)
 		}
 		j++;
 	}
+}
 
+void ft_pipe(t_pipex *pipex, int fds[][2], int nb)
+{
+	int i = 0;
+
+	while(i < nb)
+	{
+		if (pipe(fds[i]) == -1)
+		{
+			ft_free(pipex->env_path);
+			close_pipes(fds, i);  
+			err_exit("pipe");
+		}
+		i++;
+	}
+}
+
+void multiple_pipes(t_pipex *pipex, int ac)
+{
+	int		i;
+	int nb ;
+	pid_t fds[ac - 4][2];
+	pid_t ids[ac - 3];
+	int status;
+
+	nb = ac - 4;
+	ft_pipe(pipex, fds, nb);
+	multiple_pipe_helper(pipex, ids, fds, nb);
 	free_res(pipex);
 	close_pipes(fds, nb);
-
-	int a = 0;
-
-	while(a <= nb)
+	status = 0;
+	i = 0;
+	while(i <= nb)
 	{
-		if (waitpid(ids[a], &status, 0) == -1 || errno == ECHILD)
+		if (waitpid(ids[i], &status, 0) == -1 || errno == ECHILD)
 			err_exit("waitpid");
-		a++;
+		i++;
 	}
 
 	exit(WEXITSTATUS(status));
@@ -223,20 +102,21 @@ int main(int ac, char **av, char **env)
 	pipex.ac = ac;
 	pipex.cmd = NULL;
 	pipex.cmd_path = NULL;
+	pipex.here_doc = NULL;
 
-	if (ac < 5)
-		err_handler("Insufficient arguments\n");
 
 	if (ft_strcmp(av[1], "here_doc") == 0 && ac == 6)
 	{
 		check_args(env, &pipex);
 		heredoc_implement(&pipex);
 	}
-	else
+	else if (ac >= 5 && ft_strcmp(av[1], "here_doc"))
 	{
 		check_args(env, &pipex);
 		multiple_pipes(&pipex, ac);
 	}
+	else
+		err_handler("Insufficient arguments\n");
 
 	return 0;
 }

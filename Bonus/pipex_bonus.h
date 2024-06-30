@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 03:38:43 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/30 18:47:23 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ typedef struct s_pipex
 }	t_pipex;
 
 
-
-
-
 size_t	ft_strlen(char *str);
 void	free_res(t_pipex *pipex);
 char	**ft_split(char const *s, char c);
@@ -65,6 +62,19 @@ void	heredoc_implement(t_pipex *pipex);
 void	err_exit(char *str);
 void	err_handler(char *msg);
 char	*ft_itoa(int n);
-// void	error_handler(char *str);
+void    free_res(t_pipex *pipex);
+void	err_handler(char *msg);
+void	err_exit(char *str);
+void    first_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j);
+void    last_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j);
+void	first_cmd(t_pipex *pipex, pid_t fds[][2], int j);
+void	last_cmd(t_pipex *pipex, pid_t fds[][2], int j);
+void	other_cmd(t_pipex *pipex, pid_t fds[][2], int j);
+void	close_pipes(pid_t fds[][2], int size);
+void cmd1_helper(t_pipex *pipex, int fds[2]);
+void cmd2_helper(t_pipex *pipex, int fds[2]);
+void heredoc_file (t_pipex *pipex);
+char *get_file_name(void);
+int line_cmp(const char *s1, const char *s2);
 
 #endif
