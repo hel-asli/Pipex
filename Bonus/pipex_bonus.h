@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 18:47:23 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/30 22:05:19 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <stdbool.h>
+# include <limits.h>
 # include <signal.h>
 
 # define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile ;)\n"
 # define FILE_NAME "/tmp/.here_doc"
 
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+#  define BUFFER_SIZE 42
 # endif
 
 typedef struct s_pipex
@@ -40,8 +41,8 @@ typedef struct s_pipex
 	char	**cmd;
 	char	**env_path;
 	char	*here_doc;
+	pid_t	**fds;
 }	t_pipex;
-
 
 size_t	ft_strlen(char *str);
 void	free_res(t_pipex *pipex);
@@ -62,19 +63,20 @@ void	heredoc_implement(t_pipex *pipex);
 void	err_exit(char *str);
 void	err_handler(char *msg);
 char	*ft_itoa(int n);
-void    free_res(t_pipex *pipex);
+void	free_res(t_pipex *pipex);
 void	err_handler(char *msg);
 void	err_exit(char *str);
-void    first_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j);
-void    last_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j);
-void	first_cmd(t_pipex *pipex, pid_t fds[][2], int j);
-void	last_cmd(t_pipex *pipex, pid_t fds[][2], int j);
-void	other_cmd(t_pipex *pipex, pid_t fds[][2], int j);
-void	close_pipes(pid_t fds[][2], int size);
-void cmd1_helper(t_pipex *pipex, int fds[2]);
-void cmd2_helper(t_pipex *pipex, int fds[2]);
-void heredoc_file (t_pipex *pipex);
-char *get_file_name(void);
-int line_cmp(const char *s1, const char *s2);
+void	first_cmd_helper(t_pipex *pipex, pid_t **fds, int j);
+void	last_cmd_helper(t_pipex *pipex, pid_t **fds, int j);
+void	first_cmd(t_pipex *pipex, pid_t **fds, int j);
+void	last_cmd(t_pipex *pipex, pid_t **fds, int j);
+void	other_cmd(t_pipex *pipex, pid_t **fds, int j);
+void	close_pipes(pid_t **fds, int size);
+void	cmd1_helper(t_pipex *pipex, int fds[2]);
+void	cmd2_helper(t_pipex *pipex, int fds[2]);
+void	heredoc_file(t_pipex *pipex);
+char	*get_file_name(void);
+int		line_cmp(const char *s1, const char *s2);
+void free_fds(pid_t **fds, int nb);
 
 #endif

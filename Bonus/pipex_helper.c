@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:01:57 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 18:31:05 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/06/30 23:53:14 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void    free_res(t_pipex *pipex)
         free(pipex->here_doc);
         pipex->here_doc = NULL;
     }
+	if (pipex->fds)
+		free_fds(pipex->fds, pipex->ac - 4);
 }
 
 void err_handler(char *msg)
@@ -51,7 +53,7 @@ void err_exit(char *str)
 }
 
 
-void    first_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j)
+void    first_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 {
 	pipex->infile_fd = open(pipex->av[1], O_RDONLY);
 	if (pipex->infile_fd < 0)
@@ -70,7 +72,7 @@ void    first_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j)
 	}
 }
 
-void    last_cmd_helper(t_pipex *pipex, pid_t fds[][2], int j)
+void    last_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 {
 	pipex->outfile_fd = open(pipex->av[pipex->ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (pipex->outfile_fd == -1)
