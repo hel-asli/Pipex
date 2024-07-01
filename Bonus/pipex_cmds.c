@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:05:07 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 21:51:23 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/01 12:54:20 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@ void first_cmd(t_pipex *pipex, pid_t **fds, int j)
 	close_pipes(fds, pipex->ac - 4);
 	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
 	{
-		ft_free(pipex->env_path);
+		// ft_free(pipex->env_path);
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	}
 	free_res(pipex);
+	free(pipex->ids);
 	err_exit("execve first_cmd");
 }
 
@@ -46,6 +47,7 @@ void last_cmd(t_pipex *pipex, pid_t **fds, int j)
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	}
 	free_res(pipex);
+	free(pipex->ids);
 	err_exit("execve last_cmd");
 }
 
@@ -55,6 +57,7 @@ void other_cmd(t_pipex *pipex, pid_t **fds, int j)
 	if (!pipex->cmd)
 	{
 		free_res(pipex);
+		free(pipex->ids);
 		close_pipes(fds, pipex->ac - 4);
 		err_handler("split\n");
 	}
@@ -66,5 +69,6 @@ void other_cmd(t_pipex *pipex, pid_t **fds, int j)
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	}
 	free_res(pipex);
+	free(pipex->ids);
 	err_exit("execve other_cmd");
 }

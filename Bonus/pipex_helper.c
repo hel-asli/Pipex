@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:01:57 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 23:53:14 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/01 12:58:50y hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void    first_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 		close_pipes(fds, pipex->ac - 4);
 		close(pipex->infile_fd);
 		free_res(pipex);
+		free(pipex->ids);
 		err_handler("ft_split");
 	}
 }
@@ -77,8 +78,9 @@ void    last_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 	pipex->outfile_fd = open(pipex->av[pipex->ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (pipex->outfile_fd == -1)
 	{
-		free_res(pipex);
+		free(pipex->ids);
 		close_pipes(fds, pipex->ac - 4);
+		free_res(pipex);
 		err_exit("open outfile");
 	}
 	pipex->cmd = ft_split(pipex->av[j + 2], ' ');
@@ -87,6 +89,7 @@ void    last_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 		close_pipes(fds, pipex->ac - 4);
 		close(pipex->outfile_fd);
 		free_res(pipex);
+		free(pipex->ids);
 		err_handler("ft_split");
 	}
 }

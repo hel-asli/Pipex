@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 22:05:19 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/01 12:46:10 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_pipex
 	char	**env_path;
 	char	*here_doc;
 	pid_t	**fds;
+	pid_t	*ids;
 }	t_pipex;
 
 size_t	ft_strlen(char *str);

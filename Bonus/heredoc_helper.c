@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:39:49 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 18:56:47 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:01:11 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ void	cmd2_helper(t_pipex *pipex, int fds[2])
 void	heredoc_file(t_pipex *pipex)
 {
 	int		fd;
+	// char	*ptr;
 	char	*str;
-	char	*ptr;
 
 	fd = open(pipex->here_doc, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 		err_exit("open heredoc");
 	str = ft_strdup("");
-	ptr = str;
 	while (line_cmp(str, pipex->av[2]))
 	{
+		free(str);
 		write(1, "heredoc> ", ft_strlen("heredoc> "));
 		str = get_next_line(STDIN_FILENO);
 		if (!str)
@@ -75,9 +75,7 @@ void	heredoc_file(t_pipex *pipex)
 			break ;
 		}
 		write(fd, str, ft_strlen(str));
-		free(str);
 	}
-	free(ptr);
 	close(fd);
 }
 

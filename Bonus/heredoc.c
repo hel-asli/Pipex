@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 20:11:09 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:42:11 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	execute_cmd1(t_pipex *pipex, int fds[2])
 	close(fds[0]);
 	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
 	{
-		ft_free(pipex->env_path);
-		free(pipex->here_doc);
+		// ft_free(pipex->env_path);
+		// free(pipex->here_doc);
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	}
 	free_res(pipex);
@@ -52,10 +52,11 @@ void	execute_cmd2(t_pipex *pipex, int fds[2])
 	close(fds[0]);
 	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
 	{
-		ft_free(pipex->env_path);
-		free(pipex->here_doc);
+		// ft_free(pipex->env_path);
+		// free(pipex->here_doc);
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	}
+	// printf("**** %s", pipex->here_doc);
 	free_res(pipex);
 	err_exit("execve");
 }
@@ -72,7 +73,6 @@ void	parent(t_pipex *pipex, pid_t id, int fds[2])
 		execute_cmd2(pipex, fds);
 	else
 	{
-		free_res(pipex);
 		close(fds[0]);
 		close(fds[1]);
 		status[0] = 0;
@@ -83,6 +83,7 @@ void	parent(t_pipex *pipex, pid_t id, int fds[2])
 			err_exit("waitpid");
 	}
 	unlink(pipex->here_doc);
+	free_res(pipex);
 	exit(WEXITSTATUS(status[1]));
 }
 

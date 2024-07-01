@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/30 23:55:30 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:09:19 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,26 +113,25 @@ void	multiple_pipes(t_pipex *pipex, int ac)
 {
 	int		i;
 	int		nb;
-	pid_t	*ids;
 	int		status;
 
 	nb = ac - 4;
 	pipex->fds = fds_allocation(nb);
-	ids = malloc(sizeof(pid_t) * (nb + 1));
+	pipex->ids = malloc(sizeof(pid_t) * (nb + 1));
 	ft_pipe(pipex, pipex->fds, nb);
-	multiple_pipe_helper(pipex, pipex->fds, ids, nb);
+	multiple_pipe_helper(pipex, pipex->fds, pipex->ids, nb);
 	close_pipes(pipex->fds, nb);
 	free_res(pipex);
 	status = 0;
 	i = 0;
 	while (i <= nb)
 	{
-		if (waitpid(ids[i], &status, 0) == -1 || errno == ECHILD)
+		if (waitpid(pipex->ids[i], &status, 0) == -1 || errno == ECHILD)
 			err_exit("waitpid");
 		i++;
 	}
-	free(ids);
-	ids = NULL;
+	free(pipex->ids);
+	pipex->ids = NULL;
 	exit(WEXITSTATUS(status));
 }
 
@@ -146,7 +145,9 @@ int	main(int ac, char **av, char **env)
 	pipex.cmd = NULL;
 	pipex.cmd_path = NULL;
 	pipex.here_doc = NULL;
-	if (ft_strcmp(av[1], "here_doc") == 0 && ac == 6)
+	pipex.fds = NULL;
+	pipex.ids = NULL;
+	if (ac == 6 && ft_strcmp(av[1], "here_doc") == 0)
 	{
 		check_args(env, &pipex);
 		heredoc_implement(&pipex);
@@ -157,7 +158,7 @@ int	main(int ac, char **av, char **env)
 		multiple_pipes(&pipex, ac);
 	}
 	else
-	err_handler("Insufficient arguments\n");
+		err_handler("Insufficient arguments\n");
 
 	return 0;
 }
