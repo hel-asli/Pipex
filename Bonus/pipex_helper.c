@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 02:47:16 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 02:47:40 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 03:42:19 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	err_exit(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	first_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
+void	first_cmd_helper(t_pipex *pipex, int **fds, int j)
 {
 	pipex->infile_fd = open(pipex->av[1], O_RDONLY);
 	if (pipex->infile_fd < 0)
@@ -72,7 +72,7 @@ void	first_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 	}
 }
 
-void	last_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
+void	last_cmd_helper(t_pipex *pipex, int **fds, int j)
 {
 	pipex->outfile_fd = open(pipex->av[pipex->ac - 1],
 			O_RDWR | O_CREAT | O_TRUNC, 0644);

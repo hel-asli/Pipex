@@ -6,13 +6,13 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 02:48:59 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 03:38:44 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	close_pipes(pid_t **fds, int size)
+void	close_pipes(int **fds, int size)
 {
 	int	i;
 
