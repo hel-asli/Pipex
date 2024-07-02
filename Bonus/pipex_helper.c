@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 02:47:16 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 03:42:19 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 04:32:50 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,9 @@ void	first_cmd_helper(t_pipex *pipex, int **fds, int j)
 	pipex->infile_fd = open(pipex->av[1], O_RDONLY);
 	if (pipex->infile_fd < 0)
 	{
-		free_res(pipex);
 		close_pipes(fds, j);
+		free_res(pipex);
+		free(pipex->ids);
 		err_exit("open infile");
 	}
 	pipex->cmd = ft_split(pipex->av[2], ' ');

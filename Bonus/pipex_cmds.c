@@ -6,13 +6,13 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:05:07 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 03:42:27 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 04:39:44 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	first_cmd(t_pipex *pipex, int **fds, int j)
+void	first_cmd(t_pipex *pipex, pid_t **fds, int j)
 {
 	first_cmd_helper(pipex, fds, j);
 	if (dup2(pipex->infile_fd, STDIN_FILENO) == -1)
@@ -29,7 +29,7 @@ void	first_cmd(t_pipex *pipex, int **fds, int j)
 	err_exit("execve first_cmd");
 }
 
-void	last_cmd(t_pipex *pipex, int **fds, int j)
+void	last_cmd(t_pipex *pipex, pid_t **fds, int j)
 {
 	last_cmd_helper(pipex, fds, j);
 	if (dup2(pipex->outfile_fd, STDOUT_FILENO) == -1)
@@ -46,14 +46,14 @@ void	last_cmd(t_pipex *pipex, int **fds, int j)
 	err_exit("execve last_cmd");
 }
 
-void	other_cmd(t_pipex *pipex, int **fds, int j)
+void	other_cmd(t_pipex *pipex, pid_t **fds, int j)
 {
 	pipex->cmd = ft_split(pipex->av[j + 2], ' ');
 	if (!pipex->cmd)
 	{
+		close_pipes(fds, pipex->ac - 4);
 		free_res(pipex);
 		free(pipex->ids);
-		close_pipes(fds, pipex->ac - 4);
 		err_handler("split\n");
 	}
 	dup2(fds[j - 1][0], STDIN_FILENO);
@@ -66,7 +66,7 @@ void	other_cmd(t_pipex *pipex, int **fds, int j)
 	err_exit("execve other_cmd");
 }
 
-void	free_fds(int **fds, int nb)
+void	free_fds(pid_t **fds, int nb)
 {
 	int	i;
 
