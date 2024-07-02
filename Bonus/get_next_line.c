@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:32:09 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 01:05:36 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:06:22 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*read_rest(char *buffer)
 	return (rest);
 }
 
-char	*get_next_line(int fd, const char *stop_line)
+char	*get_next_line(int fd, char *stop_line)
 {
 	static char	*buffer;
 	char		*line;

@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 21:15:53 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/25 16:41:46 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:01:42 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,33 @@ char	*ft_strjoin_del(const char *s1, const char *s2, char c)
 		i++;
 	}
 	p[i++] = c;
+	j = 0;
+	while (str2[j])
+		p[i++] = str2[j++];
+	p[i] = '\0';
+	return (p);
+}
+char	*get_line(const char *s1, const char *s2)
+{
+	char	*str1;
+	char	*str2;
+	char	*p;
+	int		i;
+	int		j;
+
+	str1 = (char *)s1;
+	str2 = (char *)s2;
+	if (!str1 || !str2)
+		return (NULL);
+	p = malloc(ft_strlen(str1) + ft_strlen(str2) + 1);
+	if (!p)
+		return (NULL);
+	i = 0;
+	while (str1[i])
+	{
+		p[i] = str1[i];
+		i++;
+	}
 	j = 0;
 	while (str2[j])
 		p[i++] = str2[j++];

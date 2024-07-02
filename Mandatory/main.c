@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/01 13:01:31 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 01:50:03 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ void	first_child(t_pipex *pipex, char *av[], char **env)
 		err_exit("close write end of pipe");
 	if (check_executable(pipex->env_path,
 			&pipex->path_cmd1, pipex->first_cmd[0]))
-	{
-		// ft_free(pipex->env_path);
 		execve(pipex->path_cmd1, pipex->first_cmd, env);
-	}
 	ft_free(pipex->env_path);
 	ft_free(pipex->first_cmd);
 	err_exit("execve");
@@ -56,10 +53,7 @@ void	second_child(t_pipex *pipex, char **av, char **env)
 		err_exit("close the read end of the pipe");
 	if (check_executable(pipex->env_path,
 			&pipex->path_cmd2, pipex->second_cmd[0]))
-	{
-		// ft_free(pipex->env_path);
 		execve(pipex->path_cmd2, pipex->second_cmd, env);
-	}
 	ft_free(pipex->env_path);
 	ft_free(pipex->second_cmd);
 	err_exit("execve");

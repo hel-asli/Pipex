@@ -6,24 +6,11 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:33:19 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/25 16:59:31 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 01:50:53 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-// size_t	ft_strlen(char *str)
-// {
-// 	size_t	size;
-
-// 	size = 0;
-// 	// if (!str)
-// 	// 	return (0);
-// 	while (str[size])
-// 		size++;
-// 	return (size);
-// }
-
 int	ft_strchr(char *str)
 {
 	int	check;

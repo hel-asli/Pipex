@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 01:06:33 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 01:49:06 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,7 @@ void	execute_cmd1(t_pipex *pipex, int fds[2])
 	close(fds[1]);
 	close(fds[0]);
 	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
-	{
-		// ft_free(pipex->env_path);
-		// free(pipex->here_doc);
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
-	}
 	free_res(pipex);
 	err_exit("execve");
 }
@@ -51,12 +47,7 @@ void	execute_cmd2(t_pipex *pipex, int fds[2])
 	close(fds[1]);
 	close(fds[0]);
 	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
-	{
-		// ft_free(pipex->env_path);
-		// free(pipex->here_doc);
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
-	}
-	// printf("**** %s", pipex->here_doc);
 	free_res(pipex);
 	err_exit("execve");
 }
@@ -94,7 +85,6 @@ void	heredoc_implement(t_pipex *pipex)
 	int		fds[2];
 
 	pipex->here_doc = get_file_name();
-	// here_doc
 	if (!pipex->here_doc)
 		return ;
 	heredoc_file(pipex);

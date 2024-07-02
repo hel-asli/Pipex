@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/01 12:46:10 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:08:47 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int		stats_with(char *str);
 int		find_path(char **env);
 char	**ft_free(char **split);
 int		check_executable(char **env_path, char **path, char *cmd_name);
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, char *stop_line);
 int		ft_strchr(char *str);
 char	*ft_strdup(char *str);
 void	heredoc_implement(t_pipex *pipex);
@@ -78,6 +78,7 @@ void	cmd2_helper(t_pipex *pipex, int fds[2]);
 void	heredoc_file(t_pipex *pipex);
 char	*get_file_name(void);
 int		line_cmp(const char *s1, const char *s2);
+char	*get_line(const char *s1, const char *s2);
 void free_fds(pid_t **fds, int nb);
 
 #endif
