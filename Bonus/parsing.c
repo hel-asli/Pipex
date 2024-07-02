@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:05:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 05:05:59 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 23:00:33 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ int	check_executable(char **env_path, char **path, char *cmd_name)
 	int	i;
 
 	i = 0;
+	if (!cmd_name)
+		return (0);
 	while (env_path[i] != NULL)
 	{
 		if (access(cmd_name, F_OK | X_OK) == 0)

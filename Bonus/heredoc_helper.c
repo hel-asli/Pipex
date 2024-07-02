@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:39:49 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 06:50:40 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 23:04:39 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,6 @@ void	cmd1_helper(t_pipex *pipex, int fds[2])
 			err_exit("close");
 		err_handler("split");
 	}
-	if (!pipex->cmd[0])
-	{
-		free_res(pipex);
-		if (close(fds[0]) < 0 || close(fds[1]) < 0)
-			err_exit("close");
-		err_handler("split");
-	}
 }
 
 void	cmd2_helper(t_pipex *pipex, int fds[2])
@@ -52,13 +45,6 @@ void	cmd2_helper(t_pipex *pipex, int fds[2])
 	}
 	pipex->cmd = ft_split(pipex->av[4], ' ');
 	if (!pipex->cmd)
-	{
-		if (close(fds[0]) < 0 || close(fds[1]) < 0)
-			err_exit("close");
-		free_res(pipex);
-		err_handler("split");
-	}
-	if (!pipex->cmd[0])
 	{
 		if (close(fds[0]) < 0 || close(fds[1]) < 0)
 			err_exit("close");

@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 06:53:37 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 22:50:41 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	first_child(t_pipex *pipex, char *av[], char **env)
 		err_exit("close write end of pipe");
 	if (check_executable(pipex->env_path,
 			&pipex->path_cmd1, pipex->first_cmd[0]))
+	{
 		execve(pipex->path_cmd1, pipex->first_cmd, env);
+	}
 	ft_free(pipex->env_path);
 	ft_free(pipex->first_cmd);
 	err_exit("execve");
