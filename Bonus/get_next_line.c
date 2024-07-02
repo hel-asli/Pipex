@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 16:32:09 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/25 16:56:15 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 01:05:36 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*read_rest(char *buffer)
 	return (rest);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, const char *stop_line)
 {
 	static char	*buffer;
 	char		*line;
@@ -102,5 +102,10 @@ char	*get_next_line(int fd)
 	buffer = read_rest(buffer);
 	if (!buffer)
 		return (free(line), line = NULL, NULL);
+	if (!ft_strcmp(line, stop_line))
+	{
+		free(buffer);
+		buffer = NULL;
+	}
 	return (line);
 }

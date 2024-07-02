@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:39:49 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/01 14:01:11 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/01 23:11:34 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	heredoc_file(t_pipex *pipex)
 	while (line_cmp(str, pipex->av[2]))
 	{
 		free(str);
-		write(1, "heredoc> ", ft_strlen("heredoc> "));
+		write(1, "> ", 2);
 		str = get_next_line(STDIN_FILENO);
 		if (!str)
 			break ;

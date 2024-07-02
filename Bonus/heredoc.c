@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/01 13:42:11 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 01:06:33 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	heredoc_implement(t_pipex *pipex)
 	int		fds[2];
 
 	pipex->here_doc = get_file_name();
+	// here_doc
 	if (!pipex->here_doc)
 		return ;
 	heredoc_file(pipex);

@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/01 13:09:19 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 01:06:50 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ void	multiple_pipes(t_pipex *pipex, int ac)
 
 int	main(int ac, char **av, char **env)
 {
+	// atexit(ft_leak);
 	t_pipex	pipex;
 
 	pipex.av = av;
@@ -159,8 +160,7 @@ int	main(int ac, char **av, char **env)
 	}
 	else
 		err_handler("Insufficient arguments\n");
-
-	return 0;
+	return (0);
 }
 
 // 0x401ABE:
