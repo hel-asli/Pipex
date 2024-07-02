@@ -6,23 +6,12 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 01:49:06 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:11:38 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	line_cmp(const char *s1, const char *s2)
-{
-	while (*s1 && *s1 == *s2 && *s1 != '\n')
-	{
-		s1++;
-		s2++;
-	}
-	if (*s1 == '\n' && *s2 == '\0')
-		return (0);
-	return (*s1 - *s2);
-}
 
 void	execute_cmd1(t_pipex *pipex, int fds[2])
 {
