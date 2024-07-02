@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:05:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/06/25 16:50:20 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 05:05:59 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,12 @@ void	check_args(char *env[], t_pipex *pipex)
 		exit(EXIT_FAILURE);
 	}
 	pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
-	if (!pipex->env_path || !pipex->env_path[0])
+	if (!pipex->env_path)
+	{
+		ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	if (!pipex->env_path[0])
 	{
 		ft_free(pipex->env_path);
 		ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);

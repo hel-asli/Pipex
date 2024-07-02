@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:39:49 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 04:29:55 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 05:14:17 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,15 @@ void	cmd1_helper(t_pipex *pipex, int fds[2])
 		err_exit("open");
 	}
 	pipex->cmd = ft_split(pipex->av[3], ' ');
-	if (!pipex->cmd || !pipex->cmd[0])
+
+	if (!pipex->cmd)
+	{
+		free_res(pipex);
+		close(fds[0]);
+		close(fds[1]);
+		err_handler("split");
+	}
+	if (!pipex->cmd[0])
 	{
 		free_res(pipex);
 		close(fds[0]);
@@ -43,7 +51,14 @@ void	cmd2_helper(t_pipex *pipex, int fds[2])
 		err_exit("outfile");
 	}
 	pipex->cmd = ft_split(pipex->av[4], ' ');
-	if (!pipex->cmd || !pipex->cmd[0])
+	if (!pipex->cmd)
+	{
+		close(fds[0]);
+		close(fds[1]);
+		free_res(pipex);
+		err_handler("split");
+	}
+	if (!pipex->cmd[0])
 	{
 		close(fds[0]);
 		close(fds[1]);
@@ -62,7 +77,11 @@ void	heredoc_file(t_pipex *pipex)
 	if (fd == -1)
 		err_exit("open heredoc");
 	str = ft_strdup("");
+	if (!str)
+		return ;
 	line = get_line(pipex->av[2], "\n");
+	if (!line)
+		return ;
 	while (ft_strcmp(str, line))
 	{
 		free(str);
@@ -91,7 +110,7 @@ char	*get_file_name(void)
 		return (NULL);
 	str = ft_strjoin(ft_strdup("/tmp/.here_doc-XXX"), ptr);
 	if (!str)
-		return (NULL);
+		return (free(ptr), NULL);
 	free(ptr);
 	return (str);
 }

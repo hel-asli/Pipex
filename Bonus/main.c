@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 03:38:44 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 05:02:16 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,17 @@ void	multiple_pipes(t_pipex *pipex, int ac)
 
 	nb = ac - 4;
 	pipex->fds = fds_allocation(nb);
+	if (!pipex->fds)
+	{
+		free_res(pipex);
+		exit(EXIT_FAILURE);
+	}
 	pipex->ids = malloc(sizeof(pid_t) * (nb + 1));
+	if (!pipex->ids)
+	{
+		free_res(pipex);
+		exit(EXIT_FAILURE);
+	}
 	ft_pipe(pipex, pipex->fds, nb);
 	multiple_pipe_helper(pipex, pipex->fds, pipex->ids, nb);
 	close_pipes(pipex->fds, nb);
