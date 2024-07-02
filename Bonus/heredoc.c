@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 02:11:38 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 06:35:06 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 void	execute_cmd1(t_pipex *pipex, int fds[2])
 {
 	cmd1_helper(pipex, fds);
-	dup2(pipex->infile_fd, STDIN_FILENO);
-	close(pipex->infile_fd);
-	dup2(fds[1], 1);
-	close(fds[1]);
-	close(fds[0]);
+	if (dup2(pipex->infile_fd, STDIN_FILENO) < 0)
+		err_exit("dup2");
+	if (close(pipex->infile_fd) < 0)
+		err_exit("close");
+	if (dup2(fds[1], 1) < 0)
+		err_exit("dup2");
+	if (close(fds[1]) < 0 || close(fds[0]) < 0)
+		err_exit("close");
 	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	free_res(pipex);
@@ -29,11 +32,14 @@ void	execute_cmd1(t_pipex *pipex, int fds[2])
 void	execute_cmd2(t_pipex *pipex, int fds[2])
 {
 	cmd2_helper(pipex, fds);
-	dup2(pipex->outfile_fd, STDOUT_FILENO);
-	close(pipex->outfile_fd);
-	dup2(fds[0], 0);
-	close(fds[1]);
-	close(fds[0]);
+	if (dup2(pipex->outfile_fd, STDOUT_FILENO) < 0)
+		err_exit("dup2");
+	if (close(pipex->outfile_fd) < 0)
+		err_exit("close2");
+	if (dup2(fds[0], 0) < 0)
+		err_exit("dup2");
+	if (close(fds[1]) < 0 ||  close(fds[0]) < 0) 
+		err_exit("close");
 	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	free_res(pipex);
@@ -52,8 +58,8 @@ void	parent(t_pipex *pipex, pid_t id, int fds[2])
 		execute_cmd2(pipex, fds);
 	else
 	{
-		close(fds[0]);
-		close(fds[1]);
+		if (close(fds[0]) < 0 || close(fds[1]) < 0)
+			err_exit("close");
 		status[0] = 0;
 		if (waitpid(id, &status[0], 0) < 0)
 			err_exit("waitpid");
@@ -61,7 +67,8 @@ void	parent(t_pipex *pipex, pid_t id, int fds[2])
 		if (waitpid(id1, &status[1], 0) < 0)
 			err_exit("waitpid");
 	}
-	unlink(pipex->here_doc);
+	if (unlink(pipex->here_doc) < 0)
+		err_exit("unlink");
 	free_res(pipex);
 	exit(WEXITSTATUS(status[1]));
 }

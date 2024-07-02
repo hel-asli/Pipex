@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:39:49 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 05:14:17 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 06:50:40 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	cmd1_helper(t_pipex *pipex, int fds[2])
 	if (pipex->infile_fd < 0)
 	{
 		free_res(pipex);
-		close(fds[0]);
-		close(fds[1]);
+		if (close(fds[0]) < 0  || close(fds[1]) < 0)
+			err_exit("close");
 		err_exit("open");
 	}
 	pipex->cmd = ft_split(pipex->av[3], ' ');
@@ -27,15 +27,15 @@ void	cmd1_helper(t_pipex *pipex, int fds[2])
 	if (!pipex->cmd)
 	{
 		free_res(pipex);
-		close(fds[0]);
-		close(fds[1]);
+		if (close(fds[0]) < 0 || close(fds[1]) < 0)
+			err_exit("close");
 		err_handler("split");
 	}
 	if (!pipex->cmd[0])
 	{
 		free_res(pipex);
-		close(fds[0]);
-		close(fds[1]);
+		if (close(fds[0]) < 0 || close(fds[1]) < 0)
+			err_exit("close");
 		err_handler("split");
 	}
 }
@@ -46,22 +46,22 @@ void	cmd2_helper(t_pipex *pipex, int fds[2])
 	if (pipex->outfile_fd < 0)
 	{
 		free_res(pipex);
-		close(fds[0]);
-		close(fds[1]);
+		if (close(fds[0]) < 0 || close(fds[1]) < 0)
+			err_exit("close");
 		err_exit("outfile");
 	}
 	pipex->cmd = ft_split(pipex->av[4], ' ');
 	if (!pipex->cmd)
 	{
-		close(fds[0]);
-		close(fds[1]);
+		if (close(fds[0]) < 0 || close(fds[1]) < 0)
+			err_exit("close");
 		free_res(pipex);
 		err_handler("split");
 	}
 	if (!pipex->cmd[0])
 	{
-		close(fds[0]);
-		close(fds[1]);
+		if (close(fds[0]) < 0 || close(fds[1]) < 0)
+			err_exit("close");
 		free_res(pipex);
 		err_handler("split");
 	}
@@ -97,7 +97,8 @@ void	heredoc_file(t_pipex *pipex)
 		write(fd, str, ft_strlen(str));
 	}
 	free(line);
-	close(fd);
+	if (close(fd) < 0)
+		err_exit("close");
 }
 
 char	*get_file_name(void)

@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 01:50:03 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 06:53:37 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	parent(t_pipex *pipex, pid_t pid1, char **av, char **env)
 		second_child(pipex, av, env);
 	else
 	{
-		close(pipex->fds[0]);
-		close(pipex->fds[1]);
+		if (close(pipex->fds[0]) < 0 || close(pipex->fds[1]) < 0)
+			err_exit("close");
 		ft_free(pipex->env_path);
 		if (waitpid(pid1, &status[0], 0) == -1)
 			err_exit("waitpid");
@@ -98,8 +98,8 @@ int	main(int ac, char *av[], char *env[])
 	pid1 = fork();
 	if (pid1 == -1)
 	{
-		close(pipex.fds[0]);
-		close(pipex.fds[1]);
+		if (close(pipex.fds[0]) < 0 || close(pipex.fds[1]) < 0)
+			err_exit("close");
 		ft_free(pipex.env_path);
 		err_exit("fork");
 	}
