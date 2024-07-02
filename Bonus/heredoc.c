@@ -12,7 +12,6 @@
 
 #include "pipex_bonus.h"
 
-
 void	execute_cmd1(t_pipex *pipex, int fds[2])
 {
 	cmd1_helper(pipex, fds);

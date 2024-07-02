@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 21:15:53 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 02:01:42 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:43:10 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char	*ft_strjoin_del(const char *s1, const char *s2, char c)
 	p[i] = '\0';
 	return (p);
 }
+
 char	*get_line(const char *s1, const char *s2)
 {
 	char	*str1;

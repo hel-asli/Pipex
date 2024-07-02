@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 02:11:45 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:45:11 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <signal.h>
 
 # define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile ;)\n"
-# define FILE_NAME "/tmp/.here_doc"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -78,6 +77,7 @@ void	cmd2_helper(t_pipex *pipex, int fds[2]);
 void	heredoc_file(t_pipex *pipex);
 char	*get_file_name(void);
 char	*get_line(const char *s1, const char *s2);
-void free_fds(pid_t **fds, int nb);
+void	free_fds(pid_t **fds, int nb);
+pid_t	**fds_allocation(int nb);
 
 #endif

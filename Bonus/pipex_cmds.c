@@ -12,7 +12,7 @@
 
 #include "pipex_bonus.h"
 
-void first_cmd(t_pipex *pipex, pid_t **fds, int j)
+void	first_cmd(t_pipex *pipex, pid_t **fds, int j)
 {
 	first_cmd_helper(pipex, fds, j);
 	if (dup2(pipex->infile_fd, STDIN_FILENO) == -1)
@@ -29,7 +29,7 @@ void first_cmd(t_pipex *pipex, pid_t **fds, int j)
 	err_exit("execve first_cmd");
 }
 
-void last_cmd(t_pipex *pipex, pid_t **fds, int j)
+void	last_cmd(t_pipex *pipex, pid_t **fds, int j)
 {
 	last_cmd_helper(pipex, fds, j);
 	if (dup2(pipex->outfile_fd, STDOUT_FILENO) == -1)
@@ -46,7 +46,7 @@ void last_cmd(t_pipex *pipex, pid_t **fds, int j)
 	err_exit("execve last_cmd");
 }
 
-void other_cmd(t_pipex *pipex, pid_t **fds, int j)
+void	other_cmd(t_pipex *pipex, pid_t **fds, int j)
 {
 	pipex->cmd = ft_split(pipex->av[j + 2], ' ');
 	if (!pipex->cmd)
@@ -64,4 +64,38 @@ void other_cmd(t_pipex *pipex, pid_t **fds, int j)
 	free_res(pipex);
 	free(pipex->ids);
 	err_exit("execve other_cmd");
+}
+
+void	free_fds(pid_t **fds, int nb)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb)
+	{
+		free(fds[i]);
+		fds[i] = NULL;
+		i++;
+	}
+	free(fds);
+	fds = NULL;
+}
+
+pid_t	**fds_allocation(int nb)
+{
+	int		j;
+	pid_t	**fds;
+
+	fds = malloc(sizeof(pid_t *) * (nb));
+	if (!fds)
+		return (NULL);
+	j = 0;
+	while (j < nb)
+	{
+		fds[j] = malloc(sizeof(pid_t *) * 2);
+		if (!fds[j])
+			return (NULL);
+		j++;
+	}
+	return (fds);
 }

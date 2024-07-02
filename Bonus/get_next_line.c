@@ -26,8 +26,8 @@ static char	*read_file(char *buffer, int fd)
 	while (!ft_strchr(buffer) && n != 0)
 	{
 		n = read(fd, str, BUFFER_SIZE);
-		if (n < 0)	
-			return (free(buffer), buffer = NULL,  free(str), NULL);
+		if (n < 0)
+			return (free(buffer), buffer = NULL, free(str), NULL);
 		str[n] = 0;
 		buffer = ft_strjoin(buffer, str);
 		if (!buffer)

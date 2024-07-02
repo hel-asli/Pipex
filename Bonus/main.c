@@ -6,16 +6,11 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 01:46:26 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:48:59 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-void	ft_leak(void)
-{
-	system("leaks pipex");
-}
 
 void	close_pipes(pid_t **fds, int size)
 {
@@ -28,6 +23,23 @@ void	close_pipes(pid_t **fds, int size)
 			err_exit("close");
 		if (close(fds[i][1]) == -1)
 			err_exit("close");
+		i++;
+	}
+}
+
+void	ft_pipe(t_pipex *pipex, pid_t *fds[], int nb)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb)
+	{
+		if (pipe(fds[i]) == -1)
+		{
+			ft_free(pipex->env_path);
+			close_pipes(fds, i);
+			err_exit("pipe");
+		}
 		i++;
 	}
 }
@@ -57,56 +69,6 @@ void	multiple_pipe_helper(t_pipex *pipex, pid_t *fds[2], pid_t *ids, int nb)
 		}
 		j++;
 	}
-}
-
-void	ft_pipe(t_pipex *pipex, pid_t *fds[], int nb)
-{
-	int	i;
-
-	i = 0;
-	while (i < nb)
-	{
-		if (pipe(fds[i]) == -1)
-		{
-			ft_free(pipex->env_path);
-			close_pipes(fds, i);
-			err_exit("pipe");
-		}
-		i++;
-	}
-}
-
-pid_t **fds_allocation(int nb)
-{
-	int		j;
-	pid_t	**fds;
-
-	fds = malloc(sizeof(pid_t *) * (nb));
-	if (!fds)
-		return (NULL);
-	j = 0;
-	while (j < nb)
-	{
-		fds[j] = malloc(sizeof(pid_t *) * 2);
-		if (!fds[j])
-			return (NULL);
-		j++;
-	}
-	return (fds);
-}
-
-void free_fds(pid_t **fds, int nb)
-{
-	int i = 0;
-
-	while (i < nb)
-	{
-		free(fds[i]);
-		fds[i] = NULL;
-		i++;
-	}
-	free(fds);
-	fds = NULL;
 }
 
 void	multiple_pipes(t_pipex *pipex, int ac)
@@ -161,5 +123,3 @@ int	main(int ac, char **av, char **env)
 		err_handler("Insufficient arguments\n");
 	return (0);
 }
-
-// 0x401ABE:

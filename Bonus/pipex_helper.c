@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/30 18:01:57 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/01 12:58:50y hel-asli         ###   ########.fr       */
+/*   Created: 2024/07/02 02:47:16 by hel-asli          #+#    #+#             */
+/*   Updated: 2024/07/02 02:47:40 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void    free_res(t_pipex *pipex)
+void	free_res(t_pipex *pipex)
 {
 	if (!pipex)
 		return ;
@@ -31,29 +31,28 @@ void    free_res(t_pipex *pipex)
 		ft_free(pipex->env_path);
 		pipex->cmd_path = NULL;
 	}
-    if (pipex->here_doc)
-    {
-        free(pipex->here_doc);
-        pipex->here_doc = NULL;
-    }
+	if (pipex->here_doc)
+	{
+		free(pipex->here_doc);
+		pipex->here_doc = NULL;
+	}
 	if (pipex->fds)
 		free_fds(pipex->fds, pipex->ac - 4);
 }
 
-void err_handler(char *msg)
+void	err_handler(char *msg)
 {
 	ft_putstr_fd(msg, 2);
 	exit(EXIT_FAILURE);
 }
 
-void err_exit(char *str)
+void	err_exit(char *str)
 {
 	perror(str);
 	exit(EXIT_FAILURE);
 }
 
-
-void    first_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
+void	first_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 {
 	pipex->infile_fd = open(pipex->av[1], O_RDONLY);
 	if (pipex->infile_fd < 0)
@@ -73,9 +72,10 @@ void    first_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 	}
 }
 
-void    last_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
+void	last_cmd_helper(t_pipex *pipex, pid_t **fds, int j)
 {
-	pipex->outfile_fd = open(pipex->av[pipex->ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
+	pipex->outfile_fd = open(pipex->av[pipex->ac - 1],
+			O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (pipex->outfile_fd == -1)
 	{
 		free(pipex->ids);

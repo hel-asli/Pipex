@@ -12,23 +12,23 @@
 
 #include "pipex_bonus.h"
 
-void check_args(char *env[], t_pipex *pipex)
+void	check_args(char *env[], t_pipex *pipex)
 {
-    int i;
+	int	i;
 
-    i = find_path(env);
-    if (!i)
-    {
-        ft_putstr_fd("env PATH not found\n", STDERR_FILENO);
-        exit(EXIT_FAILURE);
-    }
-    pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
-    if (!pipex->env_path || !pipex->env_path[0])
-    {
-        ft_free(pipex->env_path);
-        ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);
-        exit(EXIT_FAILURE);
-    }
+	i = find_path(env);
+	if (!i)
+	{
+		ft_putstr_fd("env PATH not found\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
+	pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
+	if (!pipex->env_path || !pipex->env_path[0])
+	{
+		ft_free(pipex->env_path);
+		ft_putstr_fd("Failed to parse PATH\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	stats_with(char *str)
@@ -52,11 +52,8 @@ int	find_path(char **env)
 	i = 0;
 	while (env[i])
 	{
-		// puts(env[i]);
 		if (stats_with(env[i]))
-		{
 			return (i);
-		}
 		i++;
 	}
 	return (0);
