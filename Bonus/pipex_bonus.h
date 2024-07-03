@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 05:15:14 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 06:26:57 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 # include <limits.h>
 # include <signal.h>
 
-# define ERR_MSG "mInsufficient arguments you should try :\n\
-./pipex infile cmd1 cmd2 cmd3 ... cmdn outfile\n\
-./pipex here_doc LIMITER cmd cmd1 file\n"
+# define ERR_MSG "Insufficient arguments Use :\n\
+- ./pipex infile cmd1 cmd2 cmd3 ... cmdn outfile\n\
+- ./pipex here_doc LIMITER cmd cmd1 file\n"
 # define FAIL_MSG "Allocation Faild \n"
 # define EMPTY_CMD "command not found\n"
 # define EMPTY_PATH "env PATH variable is empty\n"
