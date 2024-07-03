@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:05:07 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 23:04:02 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 02:04:52 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	first_cmd(t_pipex *pipex, pid_t **fds, int j)
 	if (dup2(fds[j][1], STDOUT_FILENO) == -1)
 		err_exit("dup");
 	close_pipes(fds, pipex->ac - 4);
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
+	if (check_executable(pipex))
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	free_res(pipex);
 	free(pipex->ids);
@@ -39,7 +39,7 @@ void	last_cmd(t_pipex *pipex, pid_t **fds, int j)
 	if (dup2(fds[j - 1][0], STDIN_FILENO) == -1)
 		err_exit("dup2");
 	close_pipes(fds, pipex->ac - 4);
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
+	if (check_executable(pipex))
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	free_res(pipex);
 	free(pipex->ids);
@@ -56,11 +56,11 @@ void	other_cmd(t_pipex *pipex, pid_t **fds, int j)
 		free(pipex->ids);
 		err_handler("split\n");
 	}
-	if (dup2(fds[j - 1][0], STDIN_FILENO) < 0 || 
+	if (dup2(fds[j - 1][0], STDIN_FILENO) < 0 ||
 			dup2(fds[j][1], STDOUT_FILENO) < 0)
 		err_exit("dup2");
 	close_pipes(fds, pipex->ac - 4);
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
+	if (check_executable(pipex))
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	free_res(pipex);
 	free(pipex->ids);

@@ -6,7 +6,7 @@
 #    By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/16 04:26:01 by hel-asli          #+#    #+#              #
-#    Updated: 2024/07/01 22:53:25 by hel-asli         ###   ########.fr        #
+#    Updated: 2024/07/03 02:54:36 by hel-asli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ BONUS_SRCS = $(BONUS_DIR)/main.c $(BONUS_DIR)/utils_bonus/ft_putstr_fd.c $(BONUS
              $(BONUS_DIR)/utils_bonus/ft_strjoin.c $(BONUS_DIR)/utils_bonus/ft_strcmp.c \
 			 $(BONUS_DIR)/parsing.c $(BONUS_DIR)/get_next_line.c $(BONUS_DIR)/get_next_line_utils.c \
 			 $(BONUS_DIR)/heredoc.c $(BONUS_DIR)/utils_bonus/ft_itoa.c $(BONUS_DIR)/pipex_helper.c \
-			 $(BONUS_DIR)/pipex_cmds.c $(BONUS_DIR)/heredoc_helper.c
+			 $(BONUS_DIR)/pipex_cmds.c $(BONUS_DIR)/heredoc_helper.c $(BONUS_DIR)/pipex_init.c
 
 
 OBJS = $(SRCS:.c=.o)

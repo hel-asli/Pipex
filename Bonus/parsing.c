@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:05:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 23:00:33 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 02:23:23 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,45 +64,36 @@ int	find_path(char **env)
 	return (0);
 }
 
-int	check_path(char *str)
+void	ft_exit(t_pipex *pipex)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '/' && str[i + 1] == '/')
-			return (1);
-		i++;
-	}
-	return (0);
+	free_res(pipex);
+	free(pipex->ids);
+	err_handler("empty command");
 }
 
-int	check_executable(char **env_path, char **path, char *cmd_name)
+int	check_executable(t_pipex *pipex)
 {
 	int	i;
 
 	i = 0;
-	if (!cmd_name)
-		return (0);
-	while (env_path[i] != NULL)
+	if (!pipex->cmd[0])
+		ft_exit(pipex);
+	while (pipex->env_path[i] != NULL)
 	{
-		if (access(cmd_name, F_OK | X_OK) == 0)
+		if (access(pipex->cmd[0], F_OK | X_OK) == 0)
 		{
-			*path = cmd_name;
+			pipex->cmd_path = pipex->cmd[0];
 			return (1);
 		}
 		else
 		{
-			*path = ft_strjoin_del(env_path[i], cmd_name, '/');
-			if (!*path)
-				exit(EXIT_FAILURE);
-			if (check_path(*path))
+			pipex->cmd_path = ft_strjoin_del(pipex->env_path[i],
+					pipex->cmd[0], '/');
+			if (!pipex->cmd_path)
 				return (0);
-			if (access(*path, F_OK | X_OK) == 0)
+			if (access(pipex->cmd_path, F_OK | X_OK) == 0)
 				return (1);
-			free(*path);
-			*path = NULL;
+			free(pipex->cmd_path);
 		}
 		i++;
 	}

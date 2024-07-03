@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 05:02:16 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 02:54:03 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,7 @@ void	multiple_pipes(t_pipex *pipex, int ac)
 	int		status;
 
 	nb = ac - 4;
-	pipex->fds = fds_allocation(nb);
-	if (!pipex->fds)
-	{
-		free_res(pipex);
-		exit(EXIT_FAILURE);
-	}
-	pipex->ids = malloc(sizeof(pid_t) * (nb + 1));
-	if (!pipex->ids)
-	{
-		free_res(pipex);
-		exit(EXIT_FAILURE);
-	}
+	data_alloc(pipex, nb);
 	ft_pipe(pipex, pipex->fds, nb);
 	multiple_pipe_helper(pipex, pipex->fds, pipex->ids, nb);
 	close_pipes(pipex->fds, nb);
@@ -111,14 +100,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_pipex	pipex;
 
-	pipex.av = av;
-	pipex.env = env;
-	pipex.ac = ac;
-	pipex.cmd = NULL;
-	pipex.cmd_path = NULL;
-	pipex.here_doc = NULL;
-	pipex.fds = NULL;
-	pipex.ids = NULL;
+	pipex_init(&pipex, av, env, ac);
 	if (ac == 6 && ft_strcmp(av[1], "here_doc") == 0)
 	{
 		check_args(env, &pipex);

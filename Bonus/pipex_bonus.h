@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 06:36:24 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 02:53:32 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	check_args(char *env[], t_pipex *pipex);
 int		stats_with(char *str);
 int		find_path(char **env);
 char	**ft_free(char **split);
-int		check_executable(char **env_path, char **path, char *cmd_name);
+int		check_executable(t_pipex *pipex);
 char	*get_next_line(int fd, char *stop_line);
 int		ft_strchr(char *str);
 char	*ft_strdup(char *str);
@@ -80,5 +80,7 @@ char	*get_file_name(void);
 char	*get_line(const char *s1, const char *s2);
 void	free_fds(int **fds, int nb);
 pid_t	**fds_allocation(int nb);
+void	pipex_init(t_pipex *pipex, char **av, char **env, int ac);
+void	data_alloc(t_pipex *pipex, int nb);
 
 #endif

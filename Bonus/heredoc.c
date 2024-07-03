@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 06:35:06 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 02:40:55 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	execute_cmd1(t_pipex *pipex, int fds[2])
 		err_exit("dup2");
 	if (close(fds[1]) < 0 || close(fds[0]) < 0)
 		err_exit("close");
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
+	if (check_executable(pipex))
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	free_res(pipex);
 	err_exit("execve");
@@ -38,9 +38,9 @@ void	execute_cmd2(t_pipex *pipex, int fds[2])
 		err_exit("close2");
 	if (dup2(fds[0], 0) < 0)
 		err_exit("dup2");
-	if (close(fds[1]) < 0 ||  close(fds[0]) < 0) 
+	if (close(fds[1]) < 0 || close(fds[0]) < 0)
 		err_exit("close");
-	if (check_executable(pipex->env_path, &pipex->cmd_path, pipex->cmd[0]))
+	if (check_executable(pipex))
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
 	free_res(pipex);
 	err_exit("execve");
@@ -71,6 +71,21 @@ void	parent(t_pipex *pipex, pid_t id, int fds[2])
 		err_exit("unlink");
 	free_res(pipex);
 	exit(WEXITSTATUS(status[1]));
+}
+
+char	*get_file_name(void)
+{
+	char	*ptr;
+	char	*str;
+
+	ptr = ft_itoa(getpid());
+	if (!ptr)
+		return (NULL);
+	str = ft_strjoin(ft_strdup("/tmp/.here_doc-XXX"), ptr);
+	if (!str)
+		return (free(ptr), NULL);
+	free(ptr);
+	return (str);
 }
 
 void	heredoc_implement(t_pipex *pipex)

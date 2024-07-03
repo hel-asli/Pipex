@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:39:49 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 23:04:39 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 02:41:01 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ void	cmd1_helper(t_pipex *pipex, int fds[2])
 	if (pipex->infile_fd < 0)
 	{
 		free_res(pipex);
-		if (close(fds[0]) < 0  || close(fds[1]) < 0)
+		if (close(fds[0]) < 0 || close(fds[1]) < 0)
 			err_exit("close");
 		err_exit("open");
 	}
 	pipex->cmd = ft_split(pipex->av[3], ' ');
-
 	if (!pipex->cmd)
 	{
 		free_res(pipex);
@@ -53,15 +52,35 @@ void	cmd2_helper(t_pipex *pipex, int fds[2])
 	}
 }
 
+int	heredoc_file_opener(t_pipex *pipex)
+{
+	int	fd;
+
+	fd = open(pipex->here_doc, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		free_res(pipex);
+		err_exit("open heredoc");
+	}
+	return (fd);
+}
+
+char	*heredoc_prompt(char *line)
+{
+	char	*str;
+
+	write(1, "> ", 2);
+	str = get_next_line(STDIN_FILENO, line);
+	return (str);
+}
+
 void	heredoc_file(t_pipex *pipex)
 {
 	int		fd;
 	char	*str;
 	char	*line;
 
-	fd = open(pipex->here_doc, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (fd == -1)
-		err_exit("open heredoc");
+	fd = heredoc_file_opener(pipex);
 	str = ft_strdup("");
 	if (!str)
 		return ;
@@ -71,33 +90,15 @@ void	heredoc_file(t_pipex *pipex)
 	while (ft_strcmp(str, line))
 	{
 		free(str);
-		write(1, "> ", 2);
-		str = get_next_line(STDIN_FILENO, line);
+		str = heredoc_prompt(line);
 		if (!str)
 			break ;
 		if (!ft_strcmp(str, line))
-		{
-			free(str);
 			break ;
-		}
 		write(fd, str, ft_strlen(str));
 	}
+	if (str)
+		free(str);
 	free(line);
-	if (close(fd) < 0)
-		err_exit("close");
-}
-
-char	*get_file_name(void)
-{
-	char	*ptr;
-	char	*str;
-
-	ptr = ft_itoa(getpid());
-	if (!ptr)
-		return (NULL);
-	str = ft_strjoin(ft_strdup("/tmp/.here_doc-XXX"), ptr);
-	if (!str)
-		return (free(ptr), NULL);
-	free(ptr);
-	return (str);
+	close(fd);
 }
