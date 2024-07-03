@@ -27,7 +27,7 @@
 ./pipex infile cmd1 cmd2 cmd3 ... cmdn outfile\n\
 ./pipex here_doc LIMITER cmd cmd1 file\n"
 # define FAIL_MSG "Allocation Faild \n"
-# define EMPTY_CMD "Empty cmd\n"
+# define EMPTY_CMD "command not found\n"
 # define EMPTY_PATH "env PATH variable is empty\n"
 # define PATH_NOT_FOUND "env PATH not found\n" 
 

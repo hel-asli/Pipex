@@ -24,7 +24,7 @@
 
 # define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile\n"
 # define FAIL_MSG "Allocation Faild \n"
-# define EMPTY_CMD "Empty cmd\n"
+# define EMPTY_CMD "command not found\n"
 # define EMPTY_PATH "env PATH variable is empty\n"
 # define PATH_NOT_FOUND "env PATH not found\n" 
 
