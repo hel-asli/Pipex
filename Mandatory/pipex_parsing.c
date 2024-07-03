@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:21:08 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 22:52:55 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 01:55:07 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,44 +71,46 @@ int	find_path(char **env)
 	return (0);
 }
 
-int	check_path(char *str)
+// int	check_path(char *str)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '/' && str[i + 1] == '/')
+// 			return (1);
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+int	check_executable(t_pipex *pipex)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	if (!pipex->cmd[0])
 	{
-		if (str[i] == '/' && str[i + 1] == '/')
-			return (1);
-		i++;
+		ft_free(pipex->env_path);
+		ft_free(pipex->cmd);
+		error_handle("empty command\n");
 	}
-	return (0);
-}
-
-int	check_executable(char **env_path, char **path, char *cmd_name)
-{
-	int	i;
-
-	i = 0;
-	if (!cmd_name)
-		return (0);
-	while (env_path[i] != NULL)
+	while (pipex->env_path[i] != NULL)
 	{
-		if (access(cmd_name, F_OK | X_OK) == 0)
+		if (access(pipex->cmd[0], F_OK | X_OK) == 0)
 		{
-			*path = cmd_name;
+			pipex->path = pipex->cmd[0];
 			return (1);
 		}
 		else
 		{
-			*path = ft_strjoin(env_path[i], cmd_name, '/');
-			if (!*path)
+			pipex->path = ft_strjoin(pipex->env_path[i], pipex->cmd[0], '/');
+			if (!pipex->path)
 				return (0);
-			if (check_path(*path))
-				return (0);
-			if (access(*path, F_OK | X_OK) == 0)
+			if (access(pipex->path, F_OK | X_OK) == 0)
 				return (1);
-			free(*path);
+			free(pipex->path);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 22:50:41 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 01:55:46 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,10 @@ void	first_child(t_pipex *pipex, char *av[], char **env)
 		err_exit("close the read end of the pipe");
 	if (close(pipex->fds[1]) == -1)
 		err_exit("close write end of pipe");
-	if (check_executable(pipex->env_path,
-			&pipex->path_cmd1, pipex->first_cmd[0]))
-	{
-		execve(pipex->path_cmd1, pipex->first_cmd, env);
-	}
+	if (check_executable(pipex))
+		execve(pipex->path, pipex->cmd, env);
 	ft_free(pipex->env_path);
-	ft_free(pipex->first_cmd);
+	ft_free(pipex->cmd);
 	err_exit("execve");
 }
 
@@ -53,11 +50,10 @@ void	second_child(t_pipex *pipex, char **av, char **env)
 		err_exit("close the write end of the pipe");
 	if (close(pipex->fds[0]) == -1)
 		err_exit("close the read end of the pipe");
-	if (check_executable(pipex->env_path,
-			&pipex->path_cmd2, pipex->second_cmd[0]))
-		execve(pipex->path_cmd2, pipex->second_cmd, env);
+	if (check_executable(pipex))
+		execve(pipex->path, pipex->cmd, env);
 	ft_free(pipex->env_path);
-	ft_free(pipex->second_cmd);
+	ft_free(pipex->cmd);
 	err_exit("execve");
 }
 
