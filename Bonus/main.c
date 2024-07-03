@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 04:02:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 02:54:03 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 04:23:50 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,6 @@ int	main(int ac, char **av, char **env)
 		multiple_pipes(&pipex, ac);
 	}
 	else
-		err_handler("Insufficient arguments\n");
+		err_handler(ERR_MSG);
 	return (0);
 }

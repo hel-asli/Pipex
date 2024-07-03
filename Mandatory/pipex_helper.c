@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 03:28:13 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 01:42:28 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 04:31:49 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	first_child_helper(t_pipex *pipex, char **av)
 		close(pipex->fds[1]);
 		if (close(pipex->infile_fd) == -1)
 			err_exit("close infile");
+		ft_putstr_fd(FAIL_MSG, STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -64,6 +65,7 @@ void	second_child_helper(t_pipex *pipex, char **av)
 		close(pipex->fds[1]);
 		if (close(pipex->outfile_fd) == -1)
 			err_exit("close outfile");
+		ft_putstr_fd(FAIL_MSG, STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 }

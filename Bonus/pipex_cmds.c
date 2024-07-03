@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:05:07 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 02:04:52 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 04:25:57 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	other_cmd(t_pipex *pipex, pid_t **fds, int j)
 		close_pipes(fds, pipex->ac - 4);
 		free_res(pipex);
 		free(pipex->ids);
-		err_handler("split\n");
+		err_handler(FAIL_MSG);
 	}
 	if (dup2(fds[j - 1][0], STDIN_FILENO) < 0 ||
 			dup2(fds[j][1], STDOUT_FILENO) < 0)

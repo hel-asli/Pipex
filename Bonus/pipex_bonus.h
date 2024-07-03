@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 02:53:32 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 05:15:14 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,14 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <signal.h>
-// # define malloc(x) NULL
 
-# define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile ;)\n"
+# define ERR_MSG "mInsufficient arguments you should try :\n\
+./pipex infile cmd1 cmd2 cmd3 ... cmdn outfile\n\
+./pipex here_doc LIMITER cmd cmd1 file\n"
+# define FAIL_MSG "Allocation Faild \n"
+# define EMPTY_CMD "Empty cmd\n"
+# define EMPTY_PATH "env PATH variable is empty\n"
+# define PATH_NOT_FOUND "env PATH not found\n" 
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -82,5 +87,6 @@ void	free_fds(int **fds, int nb);
 pid_t	**fds_allocation(int nb);
 void	pipex_init(t_pipex *pipex, char **av, char **env, int ac);
 void	data_alloc(t_pipex *pipex, int nb);
+int		empty_string(char *str);
 
 #endif

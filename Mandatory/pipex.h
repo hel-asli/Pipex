@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 01:43:51 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 05:16:05 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@
 # include <stdbool.h>
 # include <signal.h>
 
-// #define malloc(x) NULL
-
 # define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile\n"
+# define FAIL_MSG "Allocation Faild \n"
+# define EMPTY_CMD "Empty cmd\n"
+# define EMPTY_PATH "env PATH variable is empty\n"
+# define PATH_NOT_FOUND "env PATH not found\n" 
 
 typedef struct s_pipex
 {
@@ -49,5 +51,6 @@ int		find_path(char **env);
 void	error_handle(char *str);
 void	first_child_helper(t_pipex *pipex, char **av);
 void	second_child_helper(t_pipex *pipex, char **av);
+int		empty_string(char *str);
 
 #endif

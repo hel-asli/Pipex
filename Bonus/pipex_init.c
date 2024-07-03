@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 02:49:39 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 02:53:02 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 04:25:36 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void	data_alloc(t_pipex *pipex, int nb)
 	if (!pipex->fds)
 	{
 		free_res(pipex);
-		exit(EXIT_FAILURE);
+		err_handler(FAIL_MSG);
 	}
 	pipex->ids = malloc(sizeof(pid_t) * (nb + 1));
 	if (!pipex->ids)
 	{
 		free_res(pipex);
-		exit(EXIT_FAILURE);
+		err_handler(FAIL_MSG);
 	}
 }
