@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:05:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 05:57:55 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 06:00:24 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	check_executable(t_pipex *pipex)
 	i = 0;
 	if (!pipex->cmd[0])
 		ft_exit(pipex);
-	while (pipex->env_path[i] != NULL)
+	while (pipex->env_path[i++] != NULL)
 	{
 		if (access(pipex->cmd[0], F_OK | X_OK) == 0)
 		{
@@ -89,7 +89,6 @@ int	check_executable(t_pipex *pipex)
 			free(pipex->cmd_path);
 			pipex->cmd_path = NULL;
 		}
-		i++;
 	}
 	return (0);
 }
