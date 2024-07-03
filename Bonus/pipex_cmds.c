@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 18:05:07 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 04:25:57 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 21:24:45 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,15 @@ void	first_cmd(t_pipex *pipex, pid_t **fds, int j)
 		err_exit("dup");
 	close_pipes(fds, pipex->ac - 4);
 	if (check_executable(pipex))
+	{
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
+		free_res(pipex);
+		free(pipex->ids);
+		err_exit("execve first_cmd");
+	}
 	free_res(pipex);
 	free(pipex->ids);
-	err_exit("execve first_cmd");
+	err_exit("access first_cmd");
 }
 
 void	last_cmd(t_pipex *pipex, pid_t **fds, int j)
@@ -40,10 +45,15 @@ void	last_cmd(t_pipex *pipex, pid_t **fds, int j)
 		err_exit("dup2");
 	close_pipes(fds, pipex->ac - 4);
 	if (check_executable(pipex))
+	{
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
+		free_res(pipex);
+		free(pipex->ids);
+		err_exit("execve last_cmd");
+	}
 	free_res(pipex);
 	free(pipex->ids);
-	err_exit("execve last_cmd");
+	err_exit("access last_cmd");
 }
 
 void	other_cmd(t_pipex *pipex, pid_t **fds, int j)
@@ -61,10 +71,15 @@ void	other_cmd(t_pipex *pipex, pid_t **fds, int j)
 		err_exit("dup2");
 	close_pipes(fds, pipex->ac - 4);
 	if (check_executable(pipex))
+	{
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
+		free_res(pipex);
+		free(pipex->ids);
+		err_exit("execve other_cmd");
+	}
 	free_res(pipex);
 	free(pipex->ids);
-	err_exit("execve other_cmd");
+	err_exit("access other_cmd");
 }
 
 void	free_fds(pid_t **fds, int nb)

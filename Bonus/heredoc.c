@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 04:28:04 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 21:25:51 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,13 @@ void	execute_cmd1(t_pipex *pipex, int fds[2])
 	if (close(fds[1]) < 0 || close(fds[0]) < 0)
 		err_exit("close");
 	if (check_executable(pipex))
+	{
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
+		free_res(pipex);
+		err_exit("execve");
+	}
 	free_res(pipex);
-	err_exit("execve");
+	err_exit("access");
 }
 
 void	execute_cmd2(t_pipex *pipex, int fds[2])
@@ -41,9 +45,13 @@ void	execute_cmd2(t_pipex *pipex, int fds[2])
 	if (close(fds[1]) < 0 || close(fds[0]) < 0)
 		err_exit("close");
 	if (check_executable(pipex))
+	{
 		execve(pipex->cmd_path, pipex->cmd, pipex->env);
+		free_res(pipex);
+		err_exit("execve");
+	}
 	free_res(pipex);
-	err_exit("execve");
+	err_exit("access");
 }
 
 void	parent(t_pipex *pipex, pid_t id, int fds[2])

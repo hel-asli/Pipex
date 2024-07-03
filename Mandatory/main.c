@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 01:55:46 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/03 21:19:36 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,15 @@ void	first_child(t_pipex *pipex, char *av[], char **env)
 	if (close(pipex->fds[1]) == -1)
 		err_exit("close write end of pipe");
 	if (check_executable(pipex))
+	{
 		execve(pipex->path, pipex->cmd, env);
+		ft_free(pipex->env_path);
+		ft_free(pipex->cmd);
+		err_exit("execve");
+	}
 	ft_free(pipex->env_path);
 	ft_free(pipex->cmd);
-	err_exit("execve");
+	err_exit("access");
 }
 
 void	second_child(t_pipex *pipex, char **av, char **env)
@@ -51,10 +56,15 @@ void	second_child(t_pipex *pipex, char **av, char **env)
 	if (close(pipex->fds[0]) == -1)
 		err_exit("close the read end of the pipe");
 	if (check_executable(pipex))
+	{
 		execve(pipex->path, pipex->cmd, env);
+		ft_free(pipex->env_path);
+		ft_free(pipex->cmd);
+		err_exit("execve");
+	}
 	ft_free(pipex->env_path);
 	ft_free(pipex->cmd);
-	err_exit("execve");
+	err_exit("access");
 }
 
 void	parent(t_pipex *pipex, pid_t pid1, char **av, char **env)
