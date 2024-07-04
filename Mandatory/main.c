@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/04 14:16:03 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/05 00:45:13 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,5 @@ int	main(int ac, char *av[], char *env[])
 		first_child(&pipex, av, env);
 	else
 		parent(&pipex, pid1, av, env);
-	exit(EXIT_SUCCESS);
+	return (0);
 }

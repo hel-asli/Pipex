@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:21:08 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/04 14:08:41 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/05 00:00:58 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	find_path(char **env)
 
 void	ft_exit(t_pipex *pipex)
 {
-	ft_free(pipex->env_path);
+	if (pipex->env_path)
+		ft_free(pipex->env_path);
 	ft_free(pipex->cmd);
 	error_handle(EMPTY_CMD);
 }

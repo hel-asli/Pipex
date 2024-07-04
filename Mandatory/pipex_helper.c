@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 03:28:13 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 04:31:49 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/04 23:59:47 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	first_child_helper(t_pipex *pipex, char **av)
 	pipex->infile_fd = open(av[1], O_RDONLY);
 	if (pipex->infile_fd == -1)
 	{
-		ft_free(pipex->env_path);
+		if (pipex->env_path)
+			ft_free(pipex->env_path);
 		close(pipex->fds[0]);
 		close(pipex->fds[1]);
 		err_exit("open infile");
@@ -37,7 +38,8 @@ void	first_child_helper(t_pipex *pipex, char **av)
 	pipex->cmd = ft_split(av[2], ' ');
 	if (!pipex->cmd)
 	{
-		ft_free(pipex->env_path);
+		if (pipex->env_path)
+			ft_free(pipex->env_path);
 		close(pipex->fds[0]);
 		close(pipex->fds[1]);
 		if (close(pipex->infile_fd) == -1)
@@ -52,7 +54,8 @@ void	second_child_helper(t_pipex *pipex, char **av)
 	pipex->outfile_fd = open(av[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (pipex->outfile_fd == -1)
 	{
-		ft_free(pipex->env_path);
+		if (pipex->env_path)
+			ft_free(pipex->env_path);
 		close(pipex->fds[0]);
 		close(pipex->fds[1]);
 		err_exit("open outfile");
@@ -60,7 +63,8 @@ void	second_child_helper(t_pipex *pipex, char **av)
 	pipex->cmd = ft_split(av[3], ' ');
 	if (!pipex->cmd)
 	{
-		ft_free(pipex->env_path);
+		if (pipex->env_path)
+			ft_free(pipex->env_path);
 		close(pipex->fds[0]);
 		close(pipex->fds[1]);
 		if (close(pipex->outfile_fd) == -1)
