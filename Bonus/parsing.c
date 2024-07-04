@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:05:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/04 14:20:05 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/05 00:53:53 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,6 @@ void	check_args(char *env[], t_pipex *pipex)
 		pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
 		if (!pipex->env_path)
 			err_handler(FAIL_MSG);
-		if (!pipex->env_path[0] || empty_string(pipex->env_path[0]))
-		{
-			ft_free(pipex->env_path);
-			err_handler(EMPTY_PATH);
-		}
 	}
 	else
 		pipex->env_path = NULL;
