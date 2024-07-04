@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 21:53:16 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/02 22:56:14 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:06:44 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ or performe some action while the parent busy doing somthing else or to protect 
 // and the calling process continues execution with existing program image
 int main(int ac, char *av[])
 {
-	int n = access("", F_OK | X_OK);
+	int n = access("    /bin/cat ", F_OK | X_OK);
 	perror("access");
 	printf("**** %d\n", n);
 	// if (ac != 5)

@@ -6,16 +6,11 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 11:53:17 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 21:19:36 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:16:03 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	ft_lsof(void)
-{
-	system("leaks -c pipex");
-}
 
 void	first_child(t_pipex *pipex, char *av[], char **env)
 {
@@ -33,11 +28,13 @@ void	first_child(t_pipex *pipex, char *av[], char **env)
 	if (check_executable(pipex))
 	{
 		execve(pipex->path, pipex->cmd, env);
-		ft_free(pipex->env_path);
+		if (pipex->env_path)
+			ft_free(pipex->env_path);
 		ft_free(pipex->cmd);
 		err_exit("execve");
 	}
-	ft_free(pipex->env_path);
+	if (pipex->env_path)
+		ft_free(pipex->env_path);
 	ft_free(pipex->cmd);
 	err_exit("access");
 }
@@ -58,11 +55,13 @@ void	second_child(t_pipex *pipex, char **av, char **env)
 	if (check_executable(pipex))
 	{
 		execve(pipex->path, pipex->cmd, env);
-		ft_free(pipex->env_path);
+		if (pipex->env_path)
+			ft_free(pipex->env_path);
 		ft_free(pipex->cmd);
 		err_exit("execve");
 	}
-	ft_free(pipex->env_path);
+	if (pipex->env_path)
+		ft_free(pipex->env_path);
 	ft_free(pipex->cmd);
 	err_exit("access");
 }
@@ -83,7 +82,8 @@ void	parent(t_pipex *pipex, pid_t pid1, char **av, char **env)
 	{
 		if (close(pipex->fds[0]) < 0 || close(pipex->fds[1]) < 0)
 			err_exit("close");
-		ft_free(pipex->env_path);
+		if (pipex->env_path)
+			ft_free(pipex->env_path);
 		if (waitpid(pid1, &status[0], 0) == -1)
 			err_exit("waitpid");
 		if (waitpid(pid, &status[1], 0) == -1)
@@ -100,7 +100,8 @@ int	main(int ac, char *av[], char *env[])
 	check_args(ac, env, &pipex);
 	if (pipe(pipex.fds) == -1)
 	{
-		ft_free(pipex.env_path);
+		if (pipex.env_path)
+			ft_free(pipex.env_path);
 		err_exit("pipe");
 	}
 	pid1 = fork();
@@ -108,7 +109,8 @@ int	main(int ac, char *av[], char *env[])
 	{
 		if (close(pipex.fds[0]) < 0 || close(pipex.fds[1]) < 0)
 			err_exit("close");
-		ft_free(pipex.env_path);
+		if (pipex.env_path)
+			ft_free(pipex.env_path);
 		err_exit("fork");
 	}
 	else if (pid1 == 0)

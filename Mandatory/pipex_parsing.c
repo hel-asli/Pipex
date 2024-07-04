@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 16:21:08 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 05:58:37 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:08:41 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,19 @@ void	check_args(int ac, char *env[], t_pipex *pipex)
 	if (ac != 5)
 		error_handle(ERR_MSG);
 	i = find_path(env);
-	if (!i)
-		error_handle(PATH_NOT_FOUND);
-	pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
-	if (!pipex->env_path)
-		error_handle(FAIL_MSG);
-	if (!pipex->env_path[0] || empty_string(pipex->env_path[0]))
+	if (i != -1)
 	{
-		ft_free(pipex->env_path);
-		error_handle(EMPTY_PATH);
+		pipex->env_path = ft_split(&env[i][ft_strlen("PATH=")], ':');
+		if (!pipex->env_path)
+			error_handle(FAIL_MSG);
+		if (!pipex->env_path[0] || empty_string(pipex->env_path[0]))
+		{
+			ft_free(pipex->env_path);
+			error_handle(EMPTY_PATH);
+		}
 	}
+	else
+		pipex->env_path = NULL;
 }
 
 int	stats_with(char *str)
@@ -58,7 +61,7 @@ int	find_path(char **env)
 		}
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 void	ft_exit(t_pipex *pipex)
@@ -75,23 +78,20 @@ int	check_executable(t_pipex *pipex)
 	i = 0;
 	if (!pipex->cmd[0])
 		ft_exit(pipex);
-	while (pipex->env_path[i] != NULL)
+	if (access(pipex->cmd[0], F_OK | X_OK) == 0)
 	{
-		if (access(pipex->cmd[0], F_OK | X_OK) == 0)
-		{
-			pipex->path = pipex->cmd[0];
+		pipex->path = pipex->cmd[0];
+		return (1);
+	}
+	while (pipex->env_path && pipex->env_path[i] != NULL)
+	{
+		pipex->path = ft_strjoin(pipex->env_path[i], pipex->cmd[0], '/');
+		if (!pipex->path)
+			return (0);
+		if (access(pipex->path, F_OK | X_OK) == 0)
 			return (1);
-		}
-		else
-		{
-			pipex->path = ft_strjoin(pipex->env_path[i], pipex->cmd[0], '/');
-			if (!pipex->path)
-				return (0);
-			if (access(pipex->path, F_OK | X_OK) == 0)
-				return (1);
-			free(pipex->path);
-			pipex->path = NULL;
-		}
+		free(pipex->path);
+		pipex->path = NULL;
 		i++;
 	}
 	return (0);
