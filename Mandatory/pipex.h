@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 21:27:25 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/05 01:02:52 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 # define ERR_MSG "BAD ARGS : infile cmd1 cmd2 outfile\n"
 # define FAIL_MSG "Allocation Faild \n"
 # define EMPTY_CMD "pipex: command not found\n"
-# define EMPTY_PATH "env PATH variable is empty\n"
-# define PATH_NOT_FOUND "env PATH not found\n" 
 
 typedef struct s_pipex
 {
