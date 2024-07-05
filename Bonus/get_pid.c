@@ -17,7 +17,6 @@ static pid_t	mixed_pids(pid_t id1, pid_t id2)
 	pid_t	result;
 
 	result = (((id1 >> 4) | (id1 << 4)) ^ ((id2 >> 4) | (id2 << 4)));
-	result = (result >> 7) | (result << 7);
 	return (result);
 }
 
