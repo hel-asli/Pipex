@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/05 16:59:07by hel-asli         ###   ########.fr       */
+/*   Created: 2024/07/05 19:59:30 by hel-asli          #+#    #+#             */
+/*   Updated: 2024/07/05 19:59:43 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,49 +79,6 @@ void	parent(t_pipex *pipex, pid_t id, int fds[2])
 		err_exit("unlink");
 	free_res(pipex);
 	exit(WEXITSTATUS(status[1]));
-}
-
-pid_t mixed_pids(pid_t id1, pid_t id2)
-{
-	pid_t result;
-
-	result = (((id1 >> 4) | (id1 << 4)) ^ ((id2 >> 4) | (id2 << 4)));
-
-	result = (result >> 7) | (result << 7);
-	return (result);
-}
-
-pid_t 	get_pid(t_pipex *pipex)
-{
-	pid_t ids[2] = {0};
-	ids[0] = fork();
-	if (ids[0] < 0)
-		err_exit("fork");
-	if (ids[0] == 0)
-	{
-		ids[1] = fork();
-		if (ids[1] < 0)
-			err_exit("fork");
-		if (ids[1] == 0)
-		{
-			free_res(pipex);
-			exit(EXIT_SUCCESS);
-		}
-		if (ids[1] > 0)
-		{
-			free_res(pipex);
-			if (waitpid(ids[1], NULL, 0) < 0)
-				err_exit("waitpid");
-			exit(EXIT_SUCCESS);
-		}
-	}
-	if (ids[0] > 0)
-	{
-		if (waitpid(ids[0], NULL, 0) < 0)
-			err_exit("waitpid");
-	}
-
-	return (mixed_pids(ids[0], ids[1]));
 }
 
 char	*get_file_name(t_pipex *pipex)

@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/05 01:43:28 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/05 20:07:33 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ pid_t	**fds_allocation(int nb);
 void	pipex_init(t_pipex *pipex, char **av, char **env, int ac);
 void	data_alloc(t_pipex *pipex, int nb);
 int		empty_string(char *str);
+pid_t	get_pid(t_pipex *pipex);
 
 #endif
