@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/05 01:03:00 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/05 01:43:28 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_pipex
 	char	*here_doc;
 	int		**fds;
 	pid_t	*ids;
+	pid_t	nb;
 }	t_pipex;
 
 size_t	ft_strlen(char *str);
@@ -79,7 +80,7 @@ void	close_pipes(int **fds, int size);
 void	cmd1_helper(t_pipex *pipex, int fds[2]);
 void	cmd2_helper(t_pipex *pipex, int fds[2]);
 void	heredoc_file(t_pipex *pipex);
-char	*get_file_name(void);
+char	*get_file_name(t_pipex *pipex);
 char	*get_line(const char *s1, const char *s2);
 void	free_fds(int **fds, int nb);
 pid_t	**fds_allocation(int nb);

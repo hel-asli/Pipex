@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 20:10:52 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 21:25:51 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/05 01:45:41 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,29 @@ void	parent(t_pipex *pipex, pid_t id, int fds[2])
 	exit(WEXITSTATUS(status[1]));
 }
 
-char	*get_file_name(void)
+pid_t 	get_pid(void)
+{
+	pid_t id = fork();
+	if (id < 0)
+		err_exit("fork");
+	if (id == 0)
+		exit(EXIT_SUCCESS);
+	if (id > 0)
+	{
+		if (waitpid(id, NULL, 0) < 0)
+			err_exit("waitpid");
+	}
+
+	return (id);
+}
+
+char	*get_file_name(t_pipex *pipex)
 {
 	char	*ptr;
 	char	*str;
 
-	ptr = ft_itoa(getpid());
+	pipex->nb = get_pid();
+	ptr = ft_itoa(pipex->nb);
 	if (!ptr)
 		return (NULL);
 	str = ft_strjoin(ft_strdup("/tmp/.here_doc-XXX"), ptr);
@@ -102,7 +119,7 @@ void	heredoc_implement(t_pipex *pipex)
 	pid_t	id;
 	int		fds[2];
 
-	pipex->here_doc = get_file_name();
+	pipex->here_doc = get_file_name(pipex);
 	if (!pipex->here_doc)
 	{
 		free_res(pipex);
