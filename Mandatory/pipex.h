@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 02:34:18 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/05 01:02:52 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/06 23:20:08 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ int		find_path(char **env);
 void	error_handle(char *str);
 void	first_child_helper(t_pipex *pipex, char **av);
 void	second_child_helper(t_pipex *pipex, char **av);
-int		empty_string(char *str);
+int		ft_strchr(char *str, char c);
 
 #endif

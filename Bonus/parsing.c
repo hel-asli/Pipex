@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:05:23 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/05 00:53:53 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/06 23:21:37 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	check_executable(t_pipex *pipex)
 		pipex->cmd_path = pipex->cmd[0];
 		return (1);
 	}
+	if (ft_strchr2(pipex->cmd[0], '/'))
+		return (0);
 	while (pipex->env_path && pipex->env_path[i++] != NULL)
 	{
 		pipex->cmd_path = ft_strjoin_del(pipex->env_path[i],

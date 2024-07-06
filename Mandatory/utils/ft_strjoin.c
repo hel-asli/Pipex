@@ -6,7 +6,7 @@
 /*   By: hel-asli <hel-asli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 21:15:53 by hel-asli          #+#    #+#             */
-/*   Updated: 2024/07/03 05:15:53 by hel-asli         ###   ########.fr       */
+/*   Updated: 2024/07/06 23:17:20 by hel-asli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,17 @@ char	*ft_strjoin(const char *s1, const char *s2, char c)
 	return (p);
 }
 
-static int	is_space(char c)
+int	ft_strchr(char *str, char c)
 {
-	return ((c >= 8 && c <= 13) || c == 32);
-}
-
-int	empty_string(char *str)
-{
-	size_t	i;
+	int i;
 
 	i = 0;
-	while (str[i] && is_space(str[i]))
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (1);
 		i++;
-	if (i == ft_strlen(str))
-		return (1);
+	}
+
 	return (0);
 }
