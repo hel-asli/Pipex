@@ -24,12 +24,12 @@ void	free_res(t_pipex *pipex)
 	if (pipex->cmd)
 	{
 		ft_free(pipex->cmd);
-		pipex->cmd_path = NULL;
+		pipex->cmd = NULL;
 	}
 	if (pipex->env_path)
 	{
 		ft_free(pipex->env_path);
-		pipex->cmd_path = NULL;
+		pipex->env_path = NULL;
 	}
 	if (pipex->here_doc)
 	{
